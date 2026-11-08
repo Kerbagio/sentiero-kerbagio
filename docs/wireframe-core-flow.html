@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sentiero Kerbagio - wireframe sketch</title>
+<!-- Intentionally rough: grayscale, system fonts, thin borders. Not a visual design. -->
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 20px; background: #fafafa; color: #222; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .sub { font-size: 12px; color: #666; margin-bottom: 16px; }
+  .row { display: flex; gap: 18px; align-items: flex-start; }
+  .phone { width: 290px; height: 600px; border: 1.5px solid #555; border-radius: 22px; background: #fff; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+  .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: #555; margin: 0 0 6px 4px; }
+  .mid { color: #000; background: #e8e8e8; padding: 1px 6px; border-radius: 4px; margin-left: 4px; }
+  .bar { padding: 14px 14px 10px; border-bottom: 1px solid #ddd; font-weight: 600; font-size: 16px; display:flex; justify-content:space-between; }
+  .content { padding: 10px 12px; flex: 1; overflow: hidden; font-size: 13px; }
+  .card { border: 1px solid #bbb; border-radius: 10px; padding: 10px; margin-bottom: 10px; }
+  .muted { color: #777; font-size: 12px; }
+  .chip { display: inline-block; border: 1px solid #999; border-radius: 12px; padding: 1px 8px; font-size: 11px; margin-right: 4px; }
+  .chip.on { background: #ddd; border-color: #555; }
+  .prog { height: 6px; background: #eee; border-radius: 3px; margin-top: 6px; }
+  .prog > div { height: 6px; background: #777; border-radius: 3px; }
+  .fab { position: absolute; right: 14px; bottom: 66px; border: 1.5px solid #444; border-radius: 16px; padding: 10px 14px; background: #f2f2f2; font-weight: 600; font-size: 13px; }
+  .nav { border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 10px 0; font-size: 12px; }
+  .nav .on { font-weight: 700; text-decoration: underline; }
+  .field { border: 1px solid #999; border-radius: 6px; padding: 8px; margin: 4px 0 10px; color: #333; }
+  .field.hint { color: #999; }
+  .lbl { font-size: 11px; color: #555; }
+  .btn { border: 1.5px solid #444; border-radius: 18px; padding: 9px; text-align: center; font-weight: 600; margin-top: 8px; }
+  .btn.ghost { border-style: dashed; font-weight: 500; }
+  .check { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px dotted #ddd; }
+  .box { width: 14px; height: 14px; border: 1.5px solid #555; border-radius: 3px; flex: none; text-align:center; font-size: 11px; line-height: 13px; }
+  .done { color: #888; text-decoration: line-through; }
+  .weather { border: 1px dashed #777; border-radius: 10px; padding: 10px; margin-bottom: 10px; background: #f6f6f6; }
+  .warn { font-size: 11px; color: #666; font-style: italic; }
+  .seg { display:flex; border:1px solid #999; border-radius: 8px; overflow:hidden; margin: 4px 0 10px; }
+  .seg div { flex:1; text-align:center; padding:6px 0; font-size:12px; border-right:1px solid #999; }
+  .seg div:last-child { border-right:none; }
+  .seg .on { background:#ddd; font-weight:700; }
+  .note { font-size: 11px; color: #444; margin-top: 8px; max-width: 290px; }
+</style>
+</head>
+<body>
+<h1>Sentiero Kerbagio - core flow wireframe</h1>
+<div class="sub">Approach C (the loop). Grey "MIDTERM" tag = in the 7-day midterm slice. Weather card and journal land after the midterm.</div>
+<div class="row">
+
+  <!-- SCREEN 1: Upcoming list. Hierarchy: next trip first, packing progress second. -->
+  <div>
+    <div class="label">1 · Upcoming <span class="mid">MIDTERM: list only</span></div>
+    <div class="phone">
+      <div class="bar">Upcoming trips <span class="muted">⋮</span></div>
+      <div class="content">
+        <!-- A trip whose date passed but was never marked done stays in Upcoming, flagged. Never auto-moved. -->
+        <div class="card">
+          <div><b>Baatara Gorge Walk</b> <span class="chip">Easy</span></div>
+          <div class="muted">Sat 31 Oct · date passed</div>
+          <div class="btn ghost" style="margin-top:6px;padding:6px">Mark as done →</div>
+        </div>
+        <div class="card">
+          <div><b>Jabal Moussa Reserve</b> <span class="chip">Moderate</span></div>
+          <div class="muted">Sat 14 Nov · in 13 days</div>
+          <div class="prog"><div style="width:55%"></div></div>
+          <div class="muted" style="margin-top:4px">6 of 11 packed</div>
+        </div>
+        <div class="card">
+          <div><b>Qadisha Valley: Qannoubine trail with an unusually long name</b> <span class="chip">Hard</span></div>
+          <div class="muted">Sat 5 Dec · in 34 days</div>
+          <div class="prog"><div style="width:0%"></div></div>
+          <div class="muted" style="margin-top:4px">0 of 14 packed</div>
+        </div>
+      </div>
+      <div class="fab">+ New trip</div>
+      <div class="nav"><span class="on">Upcoming</span><span>Completed</span></div>
+    </div>
+    <div class="note">Sorted by hike date, soonest first. On the hike day the card reads "Today · Mark as done when you're back". Empty: "No trips planned. Plan your next hike." + button.</div>
+  </div>
+
+  <!-- SCREEN 2: New trip form. Only 4 required things, from the brief. -->
+  <div>
+    <div class="label">2 · New trip <span class="mid">MIDTERM</span></div>
+    <div class="phone">
+      <div class="bar">← New trip</div>
+      <div class="content">
+        <div class="lbl">Route name *</div>
+        <div class="field">Jabal Moussa Reserve</div>
+        <div class="lbl">Date *</div>
+        <div class="field">Sat 14 Nov 2026 📅</div>
+        <div class="lbl">Difficulty *</div>
+        <div class="seg"><div>Easy</div><div class="on">Moderate</div><div>Hard</div></div>
+        <!-- Post-midterm: place for weather, resolved by geocoding. Optional: no place = no forecast, still valid. -->
+        <div class="lbl">Area, for the forecast (optional, after midterm)</div>
+        <div class="field hint">e.g. Bsharri</div>
+        <div class="warn" style="margin:-6px 0 8px">Pick the village nearest the trailhead. Mountain weather can differ from the coast.</div>
+        <div class="lbl">Packing list starts from</div>
+        <div style="margin:4px 0 10px">
+          <span class="chip">Day-hike basics (10)</span>
+          <span class="chip on">Last hike: Chouf Cedars (11)</span>
+        </div>
+        <div class="btn">Save trip</div>
+        <div class="warn" style="margin-top:6px">Save stays disabled until name + date + difficulty are set. Past dates allowed (logging an old hike).</div>
+      </div>
+    </div>
+    <div class="note">"Last hike" = most recent completed hike; chip hidden when there is none. It copies the list and puts items forgotten last time first.</div>
+  </div>
+
+  <!-- SCREEN 3: Trip detail. Checklist is the main job; weather supports it. -->
+  <div>
+    <div class="label">3 · Trip detail <span class="mid">MIDTERM: checklist</span></div>
+    <div class="phone">
+      <div class="bar">← Jabal Moussa Reserve <span class="muted">⋮</span></div>
+      <div class="content">
+        <div class="muted">Sat 14 Nov · <span class="chip">Moderate</span></div>
+        <!-- Weather card has 5 states: Loading / Content / Error+Retry / Too far ahead / No place set -->
+        <div class="weather" style="margin-top:8px">
+          <b>Forecast for Mchati, Keserwan · Sat 14 Nov</b><br>
+          12° to 19° · Rain 70% · Wind 25 km/h
+          <div style="margin-top:6px" class="muted">Suggested for this forecast:</div>
+          <span class="chip">+ Rain jacket</span><span class="chip">+ Dry bag</span>
+          <div class="warn">Forecast from Open-Meteo. Always check conditions before you go.</div>
+        </div>
+        <b>Packing · 6 of 11</b>
+        <div class="prog"><div style="width:55%"></div></div>
+        <div class="check"><div class="box"></div><span>Headlamp</span> <span class="chip">forgot last time</span><span class="muted" style="margin-left:auto">✕</span></div>
+        <div class="check"><div class="box">✓</div><span class="done">Water, 2 L</span><span class="muted" style="margin-left:auto">✕</span></div>
+        <div class="check"><div class="box">✓</div><span class="done">Trail shoes</span><span class="muted" style="margin-left:auto">✕</span></div>
+        <div class="check"><div class="box"></div><span>Snacks</span><span class="muted" style="margin-left:auto">✕</span></div>
+        <div class="check"><div class="box"></div><span>First-aid kit</span><span class="muted" style="margin-left:auto">✕</span></div>
+        <div class="field hint" style="margin-top:8px">+ Add item</div>
+        <div class="warn">Mark as done appears from the hike date.</div>
+      </div>
+    </div>
+    <div class="note">⋮ = Edit / Delete. Card states: No area ("Add an area" + button), Too far, e.g. the 5 Dec hike ("Forecast available from Fri 20 Nov"), Loading, Error + Retry. Past date or completed: no card.</div>
+  </div>
+
+  <!-- SCREEN 4: Completed = the journal. -->
+  <div>
+    <div class="label">4 · Completed / journal <span class="mid" style="background:#fff;border:1px dashed #999">after midterm</span></div>
+    <div class="phone">
+      <div class="bar">Completed hikes</div>
+      <div class="content">
+        <div class="card">
+          <div><b>Chouf Cedars Loop</b> <span class="chip">Easy</span></div>
+          <div class="muted">Sun 25 Oct · done</div>
+          <div style="margin-top:6px">"Trail was muddy after the first km. Cedars at the top were worth it. Start earlier, parking full by 10."</div>
+          <div class="muted" style="margin-top:6px">Forgot: headlamp</div>
+        </div>
+        <div class="card">
+          <div><b>Baskinta Literary Trail, section 2</b> <span class="chip">Moderate</span></div>
+          <div class="muted">Sun 18 Oct · done</div>
+          <div style="margin-top:6px">"Good signage. 4h with breaks."</div>
+        </div>
+        <!-- Search box = 'previous route notes are hard to find later' from the brief -->
+        <div class="field hint">🔍 Search notes and routes</div>
+      </div>
+      <div class="nav"><span>Upcoming</span><span class="on">Completed</span></div>
+    </div>
+    <div class="note">Mark-as-done sheet: notes, tick items you forgot, add a forgotten item that was never on the list. Save moves it here (Undo snackbar). Sorted by hike date, newest first.</div>
+  </div>
+
+</div>
+</body>
+</html>

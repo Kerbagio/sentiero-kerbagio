@@ -1,0 +1,25 @@
+// Domain layer: plain Kotlin types the UI works with. No Android or Room imports here,
+// so screens and ViewModels never depend on how the data is stored.
+// The repository converts Room entities into these at its boundary.
+package com.anthony.sentiero.domain
+
+import java.time.LocalDate
+
+/** Room stores this enum as TEXT by its name (EASY, MODERATE, HARD). */
+enum class Difficulty { EASY, MODERATE, HARD }
+
+/** "Moderate" instead of "MODERATE", for showing on screen. */
+val Difficulty.label: String
+    get() = name.lowercase().replaceFirstChar { it.uppercase() }
+
+data class Hike(
+    val id: String,
+    val routeName: String,
+    val date: LocalDate,
+    val difficulty: Difficulty,
+)
+
+/** One row on the Upcoming list: the hike plus how much of its list is packed. */
+data class HikeSummary(val hike: Hike, val packedCount: Int, val totalCount: Int)
+
+data class PackingItem(val id: String, val label: String, val isPacked: Boolean)

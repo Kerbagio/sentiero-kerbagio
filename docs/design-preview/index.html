@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentiero Kerbagio design system preview</title>
+<style>
+  /* Fonts: Fontsource copies of the Google Fonts OFL files (Barlow Condensed, Source Sans 3). In the app: res/font TTFs. */
+  @font-face { font-family: "Barlow Condensed"; font-weight: 500; src: url(fonts/barlow-condensed-latin-500-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Barlow Condensed"; font-weight: 600; src: url(fonts/barlow-condensed-latin-600-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Source Sans 3"; font-weight: 400; src: url(fonts/source-sans-3-latin-400-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Source Sans 3"; font-weight: 500; src: url(fonts/source-sans-3-latin-500-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Source Sans 3"; font-weight: 600; src: url(fonts/source-sans-3-latin-600-normal.woff2) format("woff2"); }
+
+  :root {
+    --surface: #F4F4F0; --surface-lowest: #FFFFFF; --surface-low: #EFEFEA; --surface-container: #E9EAE4; --surface-high: #E3E4DE;
+    --on-surface: #1A231F; --on-surface-variant: #4F5A54; --outline: #747E78; --outline-variant: #C6CBC5;
+    --primary: #24473A; --on-primary: #FFFFFF; --primary-container: #CFE3D8; --on-primary-container: #0B2A1F;
+    --secondary: #55635B; --secondary-container: #D8E2DB; --on-secondary-container: #131E18;
+    --tertiary: #B5400B; --blaze-fill: #E8590C; --tertiary-container: #FFDBCC; --on-tertiary-container: #5A1B00;
+    --error: #BA1A1A; --error-container: #FFDAD6; --on-error-container: #410002;
+    --inverse-surface: #2E3531; --inverse-on-surface: #EEF1EC; --inverse-primary: #9DCFB6;
+    --display: "Barlow Condensed", sans-serif; --body: "Source Sans 3", sans-serif;
+  }
+  .dark {
+    --surface: #111714; --surface-lowest: #0C110F; --surface-low: #171E1A; --surface-container: #1B2320; --surface-high: #252D29;
+    --on-surface: #E2E6E1; --on-surface-variant: #B9C3BC; --outline: #87918B; --outline-variant: #3F4943;
+    --primary: #9DCFB6; --on-primary: #003825; --primary-container: #1F4E3D; --on-primary-container: #B9EBD1;
+    --secondary: #BCCABF; --secondary-container: #3D4A42; --on-secondary-container: #D8E6DB;
+    --tertiary: #FFB693; --blaze-fill: #FF8A4C; --tertiary-container: #7A3000; --on-tertiary-container: #FFDBCC;
+    --error: #FFB4AB; --error-container: #93000A; --on-error-container: #FFDAD6;
+    --inverse-surface: #E2E6E1; --inverse-on-surface: #2E3531; --inverse-primary: #24473A;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--surface); color: var(--on-surface); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+  .page { max-width: 1240px; margin: 0 auto; padding: 32px 24px 48px; }
+  h1 { font-family: var(--display); font-weight: 600; font-size: 40px; line-height: 1.1; margin: 0 0 4px; }
+  h2 { font-family: var(--display); font-weight: 600; font-size: 26px; margin: 40px 0 12px; }
+  .lede { color: var(--on-surface-variant); max-width: 720px; margin: 0; }
+  .num { font-variant-numeric: tabular-nums; }
+  .row-wrap { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+
+  /* Type specimen */
+  .spec { display: grid; grid-template-columns: 180px 1fr; gap: 10px 20px; align-items: baseline; border-top: 1px solid var(--outline-variant); padding-top: 12px; }
+  .spec .role { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); }
+  .headline-m { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 34px; }
+  .title-l { font-family: var(--display); font-weight: 600; font-size: 22px; line-height: 28px; }
+  .title-m { font-weight: 600; font-size: 16px; line-height: 22px; }
+  .body-l { font-size: 16px; line-height: 24px; }
+  .body-m { font-size: 14px; line-height: 20px; }
+  .label-l { font-weight: 600; font-size: 14px; line-height: 20px; }
+  .label-m { font-weight: 600; font-size: 12px; line-height: 16px; letter-spacing: .02em; }
+
+  /* Palette */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .sw { border: 1px solid var(--outline-variant); border-radius: 8px; overflow: hidden; background: var(--surface-lowest); }
+  .sw .chip { height: 56px; }
+  .sw .meta { padding: 8px 10px; font-size: 12px; line-height: 16px; }
+  .sw .meta b { display: block; font-size: 13px; }
+
+  /* Phones */
+  .phone { width: 360px; height: 740px; border: 1px solid var(--outline); border-radius: 28px; overflow: hidden; background: var(--surface); position: relative; display: flex; flex-direction: column; }
+  .cap { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); margin: 0 0 8px 4px; }
+  .status { height: 24px; }
+  .appbar { display: flex; align-items: center; gap: 12px; padding: 8px 16px 12px; }
+  .appbar .t { font-family: var(--display); font-weight: 600; font-size: 28px; line-height: 34px; flex: 1; }
+  .appbar .t.small { font-size: 22px; line-height: 28px; }
+  .icon { width: 24px; height: 24px; color: var(--on-surface-variant); display: inline-flex; align-items: center; justify-content: center; font-size: 20px; }
+  .content { flex: 1; overflow: hidden; }
+  .listrow { padding: 12px 16px 10px; border-bottom: 1px solid var(--outline-variant); }
+  .listrow .route { font-family: var(--display); font-weight: 600; font-size: 22px; line-height: 26px; }
+  .listrow .meta { font-size: 14px; line-height: 20px; color: var(--on-surface-variant); display: flex; gap: 8px; align-items: center; margin-top: 2px; }
+  .diff { font-size: 12px; font-weight: 600; border: 1px solid var(--outline); border-radius: 4px; padding: 0 6px; line-height: 18px; color: var(--on-surface-variant); }
+  .bar { height: 3px; background: var(--outline-variant); border-radius: 2px; margin-top: 8px; }
+  .bar > div { height: 3px; background: var(--primary); border-radius: 2px; }
+  .due { color: var(--on-surface); font-weight: 600; }
+  .textbtn { color: var(--primary); font-weight: 600; font-size: 14px; }
+  .fab { position: absolute; right: 16px; bottom: 96px; background: var(--primary); color: var(--on-primary); border-radius: 12px; padding: 16px 20px; font-weight: 600; font-size: 14px; box-shadow: 0 3px 6px rgba(0,0,0,.18); }
+  .navbar { height: 80px; background: var(--surface-container); display: flex; justify-content: space-around; align-items: center; }
+  .navitem { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: var(--on-surface-variant); }
+  .pill { width: 64px; height: 32px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .navitem.on { color: var(--on-surface); }
+  .navitem.on .pill { background: var(--secondary-container); color: var(--on-secondary-container); }
+
+  .panel { background: var(--surface-container); border-radius: 8px; padding: 12px 14px; margin: 4px 16px 16px; }
+  .panel .k { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); }
+  .panel .v { font-size: 16px; line-height: 22px; margin: 2px 0 8px; }
+  .assist { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--outline); border-radius: 6px; padding: 4px 10px; font-size: 14px; font-weight: 600; margin: 0 6px 6px 0; color: var(--on-surface); }
+  .attrib { font-size: 12px; color: var(--on-surface-variant); }
+  .note { margin: 0 16px 12px; padding: 10px 12px; border-radius: 6px; background: var(--tertiary-container); color: var(--on-tertiary-container); font-size: 14px; line-height: 20px; }
+  .section-h { display: flex; justify-content: space-between; align-items: baseline; padding: 0 16px; }
+  .section-h .h { font-weight: 600; font-size: 16px; }
+  .check { display: flex; align-items: center; gap: 14px; min-height: 52px; padding: 0 16px; border-bottom: 1px solid var(--outline-variant); }
+  .box { width: 18px; height: 18px; border: 2px solid var(--on-surface-variant); border-radius: 3px; flex: none; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; }
+  .box.on { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+  .lbl { flex: 1; font-size: 16px; }
+  .lbl.done { color: var(--on-surface-variant); }
+  .x { color: var(--on-surface-variant); font-size: 16px; }
+  .tag { display: inline-flex; align-items: center; gap: 6px; background: var(--tertiary-container); color: var(--on-tertiary-container); border-radius: 4px; padding: 2px 8px; font-size: 12px; font-weight: 600; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blaze-fill); }
+  .remembered { background: linear-gradient(90deg, color-mix(in srgb, var(--tertiary-container) 55%, transparent), transparent 70%); }
+  .addfield { margin: 12px 16px; border: 1px solid var(--outline); border-radius: 6px; padding: 12px; color: var(--on-surface-variant); font-size: 16px; }
+
+  .field { margin: 0 16px 14px; }
+  .field .fl { font-size: 12px; font-weight: 600; color: var(--on-surface-variant); margin-bottom: 4px; }
+  .field .in { border: 1px solid var(--outline); border-radius: 6px; padding: 12px; font-size: 16px; }
+  .field .in.focus { border: 2px solid var(--primary); padding: 11px; }
+  .field .help { font-size: 12px; color: var(--on-surface-variant); margin-top: 4px; }
+  .seg { display: flex; border: 1px solid var(--outline); border-radius: 6px; overflow: hidden; }
+  .seg div { flex: 1; text-align: center; padding: 10px 0; font-size: 14px; font-weight: 600; border-right: 1px solid var(--outline); }
+  .seg div:last-child { border-right: 0; }
+  .seg .on { background: var(--secondary-container); color: var(--on-secondary-container); }
+  .choice { display: flex; gap: 8px; flex-wrap: wrap; }
+  .fchip { border: 1px solid var(--outline); border-radius: 6px; padding: 6px 12px; font-size: 14px; font-weight: 600; }
+  .fchip.on { background: var(--secondary-container); border-color: var(--secondary-container); color: var(--on-secondary-container); }
+  .btn { margin: 8px 16px; background: var(--primary); color: var(--on-primary); text-align: center; border-radius: 8px; padding: 10px; font-weight: 600; font-size: 14px; }
+  .snack { position: absolute; left: 12px; right: 12px; bottom: 16px; background: var(--inverse-surface); color: var(--inverse-on-surface); border-radius: 4px; padding: 14px 16px; font-size: 14px; display: flex; justify-content: space-between; }
+  .snack b { color: var(--inverse-primary); }
+  .scrim { position: absolute; inset: 0; background: rgba(0,0,0,.32); }
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: var(--surface-low); border-radius: 20px 20px 0 0; padding: 8px 0 16px; }
+  .handle { width: 32px; height: 4px; border-radius: 2px; background: var(--outline); margin: 6px auto 12px; }
+  .sheet .t { font-family: var(--display); font-weight: 600; font-size: 22px; padding: 0 16px 10px; }
+  .toggle { position: fixed; top: 16px; right: 16px; background: var(--primary); color: var(--on-primary); border: 0; border-radius: 8px; padding: 8px 14px; font-family: var(--body); font-weight: 600; cursor: pointer; }
+  @media (max-width: 760px) { .spec { grid-template-columns: 1fr; } .phone { width: 100%; max-width: 360px; } }
+</style>
+</head>
+<body>
+<button class="toggle" onclick="document.body.classList.toggle('dark')">Light / dark</button>
+<div class="page">
+  <h1>Sentiero Kerbagio</h1>
+  <p class="lede">Trail-marker utility: limestone ground, cedar ink, and one painted blaze that appears only where the app remembered something for you.</p>
+
+  <h2>Type</h2>
+  <div class="spec">
+    <div class="role">headlineMedium · Barlow Condensed 600 · 28/34</div><div class="headline-m">Qadisha Valley: Qannoubine trail</div>
+    <div class="role">titleLarge · Barlow Condensed 600 · 22/28</div><div class="title-l">Jabal Moussa Reserve</div>
+    <div class="role">titleMedium · Source Sans 3 600 · 16/22</div><div class="title-m">Packing · 6 of 12</div>
+    <div class="role">bodyLarge · Source Sans 3 400 · 16/24</div><div class="body-l">Trail was muddy after the first km. Cedars at the top were worth it. Start earlier; the parking was full by 10.</div>
+    <div class="role">bodyMedium · Source Sans 3 400 · 14/20</div><div class="body-m num">Sat 14 Nov · in 13 days · 12° to 19° · Rain 70% · Wind 25 km/h</div>
+    <div class="role">labelLarge · Source Sans 3 600 · 14/20</div><div class="label-l">Save trip</div>
+    <div class="role">labelMedium · Source Sans 3 600 · 12/16</div><div class="label-m">Forgot last time</div>
+  </div>
+
+  <h2>Color roles (Material 3)</h2>
+  <div class="swatches">
+    <div class="sw"><div class="chip" style="background:var(--surface)"></div><div class="meta"><b>surface</b>#F4F4F0 / #111714</div></div>
+    <div class="sw"><div class="chip" style="background:var(--surface-container)"></div><div class="meta"><b>surfaceContainer</b>#E9EAE4 / #1B2320</div></div>
+    <div class="sw"><div class="chip" style="background:var(--on-surface)"></div><div class="meta"><b>onSurface</b>#1A231F / #E2E6E1</div></div>
+    <div class="sw"><div class="chip" style="background:var(--on-surface-variant)"></div><div class="meta"><b>onSurfaceVariant</b>#4F5A54 / #B9C3BC</div></div>
+    <div class="sw"><div class="chip" style="background:var(--primary)"></div><div class="meta"><b>primary</b>#24473A / #9DCFB6</div></div>
+    <div class="sw"><div class="chip" style="background:var(--secondary-container)"></div><div class="meta"><b>secondaryContainer</b>#D8E2DB / #3D4A42</div></div>
+    <div class="sw"><div class="chip" style="background:var(--blaze-fill)"></div><div class="meta"><b>blaze (fill)</b>#E8590C / #FF8A4C</div></div>
+    <div class="sw"><div class="chip" style="background:var(--tertiary)"></div><div class="meta"><b>tertiary (blaze text)</b>#B5400B / #FFB693</div></div>
+    <div class="sw"><div class="chip" style="background:var(--tertiary-container)"></div><div class="meta"><b>tertiaryContainer</b>#FFDBCC / #7A3000</div></div>
+    <div class="sw"><div class="chip" style="background:var(--error)"></div><div class="meta"><b>error</b>#BA1A1A / #FFB4AB</div></div>
+    <div class="sw"><div class="chip" style="background:var(--outline)"></div><div class="meta"><b>outline</b>#747E78 / #87918B</div></div>
+    <div class="sw"><div class="chip" style="background:var(--outline-variant)"></div><div class="meta"><b>outlineVariant</b>#C6CBC5 / #3F4943</div></div>
+  </div>
+
+  <h2>On real screens</h2>
+  <div class="row-wrap">
+
+    <div>
+      <div class="cap">Upcoming · rows, not cards</div>
+      <div class="phone">
+        <div class="status"></div>
+        <div class="appbar"><div class="t">Upcoming</div><span class="icon">⋮</span></div>
+        <div class="content">
+          <div class="listrow">
+            <div class="route">Baatara Gorge Walk</div>
+            <div class="meta"><span class="diff">Easy</span><span class="due">Sat 31 Oct · date passed</span></div>
+            <div class="meta" style="margin-top:6px"><span class="textbtn">Mark as done</span></div>
+          </div>
+          <div class="listrow">
+            <div class="route">Jabal Moussa Reserve</div>
+            <div class="meta num"><span class="diff">Moderate</span>Sat 14 Nov · in 13 days</div>
+            <div class="bar"><div style="width:50%"></div></div>
+            <div class="meta num" style="font-size:12px">6 of 12 packed</div>
+          </div>
+          <div class="listrow">
+            <div class="route">Qadisha Valley: Qannoubine trail</div>
+            <div class="meta num"><span class="diff">Hard</span>Sat 5 Dec · in 34 days</div>
+            <div class="bar"><div style="width:0%"></div></div>
+            <div class="meta num" style="font-size:12px">0 of 14 packed</div>
+          </div>
+        </div>
+        <div class="fab">+ New trip</div>
+        <div class="navbar">
+          <div class="navitem on"><div class="pill">▲</div>Upcoming</div>
+          <div class="navitem"><div class="pill">✎</div>Journal</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="cap">Trip detail · blaze only on what was remembered (row tint = the 0.9 s arrival moment)</div>
+      <div class="phone">
+        <div class="status"></div>
+        <div class="appbar"><span class="icon">←</span><div class="t small">Jabal Moussa Reserve</div><span class="icon">⋮</span></div>
+        <div class="content">
+          <div class="body-m num" style="padding:0 16px 8px;color:var(--on-surface-variant)">Sat 14 Nov · Moderate</div>
+          <div class="panel">
+            <div class="k">Forecast for Mchati, Keserwan · Sat 14 Nov</div>
+            <div class="v num">12° to 19° · Rain 70% · Wind 25 km/h · UV 4</div>
+            <span class="assist">+ Rain jacket</span><span class="assist">+ Dry bag</span>
+            <div class="attrib">Forecast from Open-Meteo. Always check conditions before you go.</div>
+          </div>
+          <div class="section-h"><span class="h">Packing</span><span class="body-m num" style="color:var(--on-surface-variant)">6 of 12</span></div>
+          <div class="bar" style="margin:6px 16px 4px"><div style="width:50%"></div></div>
+          <div class="check remembered"><div class="box"></div><span class="lbl">Headlamp <span class="tag"><span class="dot"></span>Forgot last time</span></span><span class="x">✕</span></div>
+          <div class="check"><div class="box on">✓</div><span class="lbl done">Water (2 L)</span><span class="x">✕</span></div>
+          <div class="check"><div class="box on">✓</div><span class="lbl done">Trail shoes</span><span class="x">✕</span></div>
+          <div class="check"><div class="box"></div><span class="lbl">Snacks</span><span class="x">✕</span></div>
+          <div class="check"><div class="box"></div><span class="lbl">First-aid kit</span><span class="x">✕</span></div>
+          <div class="addfield">+ Add item</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="cap">Mark as done · bottom sheet + Undo</div>
+      <div class="phone">
+        <div class="status"></div>
+        <div class="appbar"><span class="icon">←</span><div class="t small">Chouf Cedars Loop</div><span class="icon">⋮</span></div>
+        <div class="content">
+          <div class="body-m num" style="padding:0 16px 8px;color:var(--on-surface-variant)">Sun 25 Oct · Easy</div>
+          <div class="check"><div class="box on">✓</div><span class="lbl done">Water (2 L)</span></div>
+          <div class="check"><div class="box on">✓</div><span class="lbl done">Snacks</span></div>
+        </div>
+        <div class="scrim"></div>
+        <div class="sheet">
+          <div class="handle"></div>
+          <div class="t">How did it go?</div>
+          <div class="field"><div class="fl">Notes</div><div class="in focus">Trail was muddy after the first km. Cedars at the top were worth it.</div></div>
+          <div class="section-h"><span class="h">Anything you forgot?</span></div>
+          <div class="check"><div class="box on">✓</div><span class="lbl">Headlamp</span></div>
+          <div class="check"><div class="box"></div><span class="lbl">Sun hat</span></div>
+          <div class="addfield">+ Add something you forgot</div>
+          <div class="btn">Save to journal</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
