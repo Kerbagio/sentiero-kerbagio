@@ -23,9 +23,10 @@ data class HikeFormUiState(
     val routeName: String = "",
     val date: LocalDate? = null,
     val difficulty: Difficulty? = null,
+    val isSaving: Boolean = false,
 ) {
     val canSave: Boolean
-        get() = routeName.isNotBlank() && date != null && difficulty != null
+        get() = routeName.isNotBlank() && date != null && difficulty != null && !isSaving
 }
 
 class HikeFormViewModel(private val repo: TripRepository) : ViewModel() {
@@ -40,7 +41,8 @@ class HikeFormViewModel(private val repo: TripRepository) : ViewModel() {
     /** Creates the hike, then calls [onSaved] with its id so the screen can open it. */
     fun save(onSaved: (String) -> Unit) {
         val s = _uiState.value
-        if (!s.canSave) return
+        if (!s.canSave) return // a second tap arrives here with isSaving = true and stops
+        _uiState.update { it.copy(isSaving = true) } // set before the save starts, not inside it
         viewModelScope.launch {
             val id = repo.createHike(s.routeName, s.date!!, s.difficulty!!)
             onSaved(id)
