@@ -58,7 +58,7 @@ Anything not built by the deadline is dropped from the end of P3: the reminder (
 ## Week 2 — Mon 9 – Sun 15 Nov · Finish the midterm properly, edit the checklist, build the weather data layer
 **Planned: 13.5 h** (the midterm was built bare; 2.7 Delete moved to week 5)
 - [x] Midterm catch-up: the DESIGN.md theme (colors, bundled fonts, type, shapes) (1.5 h)
-- [ ] Midterm catch-up: TemplatesTest, HikeDetailViewModelTest, TripDaoTest (2 h)
+- [x] Midterm catch-up: TemplatesTest, HikeDetailViewModelTest, TripDaoTest (2 h)
 - [ ] Midterm catch-up: copy into strings.xml, 80-char cap + counter, double-tap guard, "Couldn't save" snackbar, relative date labels (1 h)
 - [ ] 2.1 Repository: `addItem` (appends inside a transaction), `deleteItem` / `restoreItem` (1 h)
 - [ ] 2.1 UI: "+ Add item" field, ✕ with Undo snackbar, zero-items state (2 h)
