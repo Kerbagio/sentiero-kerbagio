@@ -1,6 +1,8 @@
 // UI layer (navigation): the map of screens and how to move between them. Screens only
 // receive callbacks like onOpenHike(id); this file decides what those callbacks do,
 // so no screen needs to know about the NavController.
+// Back uses navigateUp(), never popBackStack(): a fast double tap on popBackStack()
+// would also remove Upcoming and leave a blank screen.
 package com.anthony.sentiero.ui.nav
 
 import androidx.compose.runtime.Composable
@@ -31,7 +33,7 @@ fun SentieroNavHost() {
         composable<HikeForm> {
             HikeFormScreen(
                 viewModel = viewModel(factory = HikeFormViewModel.Factory),
-                onBack = { navController.popBackStack() },
+                onBack = { navController.navigateUp() },
                 // Open the new hike and remove the form, so Back goes to Upcoming.
                 onSaved = { id ->
                     navController.navigate(HikeDetail(id)) {
@@ -44,7 +46,7 @@ fun SentieroNavHost() {
             val id = entry.toRoute<HikeDetail>().id
             HikeDetailScreen(
                 viewModel = viewModel(factory = HikeDetailViewModel.factory(id)),
-                onBack = { navController.popBackStack() },
+                onBack = { navController.navigateUp() },
             )
         }
     }
