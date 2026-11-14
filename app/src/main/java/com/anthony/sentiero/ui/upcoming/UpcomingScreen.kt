@@ -31,6 +31,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.anthony.sentiero.ui.RelativeDay
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import com.anthony.sentiero.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,11 +50,11 @@ fun UpcomingScreen(
                 title = {
                     Column {
                         Text(
-                            "Sentiero Kerbagio",
+                            stringResource(R.string.app_full_name),
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        Text("Upcoming", style = MaterialTheme.typography.headlineSmall)
+                        Text(stringResource(R.string.upcoming_title), style = MaterialTheme.typography.headlineSmall)
                     }
                 },
             )
@@ -61,7 +64,7 @@ fun UpcomingScreen(
                 ExtendedFloatingActionButton(
                     onClick = onNewHike,
                     icon = { Icon(Icons.Filled.Add, contentDescription = null) },
-                    text = { Text("New hike") },
+                    text = { Text(stringResource(R.string.new_hike)) },
                     // DESIGN.md: the FAB is the one filled primary action (Material defaults to primaryContainer).
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -77,9 +80,9 @@ fun UpcomingScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text("No hikes planned. Plan your next one.", style = MaterialTheme.typography.bodyLarge)
+                Text(stringResource(R.string.upcoming_empty), style = MaterialTheme.typography.bodyLarge)
                 Button(onClick = onNewHike, shape = MaterialTheme.shapes.medium, modifier = Modifier.padding(top = 16.dp)) {
-                    Text("New hike")
+                    Text(stringResource(R.string.new_hike))
                 }
             }
 
@@ -114,7 +117,7 @@ private fun HikeRow(row: UpcomingRow, onClick: () -> Unit) {
             overflow = TextOverflow.Ellipsis,
         )
         Text(
-            "${row.difficulty} · ${row.dateLabel} · ${relativeText(row.relative)}",
+            stringResource(R.string.upcoming_row_meta, row.difficulty, row.dateLabel, relativeText(row.relative)),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -123,17 +126,18 @@ private fun HikeRow(row: UpcomingRow, onClick: () -> Unit) {
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
         )
         Text(
-            "${row.packed} of ${row.total} packed",
+            stringResource(R.string.packed_count, row.packed, row.total),
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(top = 4.dp),
         )
     }
 }
 
-// Words for each RelativeDay (they move to strings.xml with the rest of the copy).
+// Words for each RelativeDay, from strings.xml.
+@Composable
 private fun relativeText(relative: RelativeDay): String = when (relative) {
-    RelativeDay.Today -> "Today"
-    RelativeDay.Tomorrow -> "Tomorrow"
-    is RelativeDay.InDays -> "in ${relative.days} days"
-    RelativeDay.Passed -> "Date passed"
+    RelativeDay.Today -> stringResource(R.string.relative_today)
+    RelativeDay.Tomorrow -> stringResource(R.string.relative_tomorrow)
+    is RelativeDay.InDays -> pluralStringResource(R.plurals.relative_in_days, relative.days, relative.days)
+    RelativeDay.Passed -> stringResource(R.string.relative_passed)
 }

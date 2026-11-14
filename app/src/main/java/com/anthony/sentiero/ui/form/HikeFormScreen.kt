@@ -47,6 +47,8 @@ import com.anthony.sentiero.domain.templateFor
 import com.anthony.sentiero.ui.shortLabel
 import java.time.Instant
 import java.time.ZoneOffset
+import androidx.compose.ui.res.stringResource
+import com.anthony.sentiero.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,10 +61,12 @@ fun HikeFormScreen(
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val saveFailedText = stringResource(R.string.save_failed)
+
     // Show "Couldn't save" once, then tell the ViewModel it was seen.
     LaunchedEffect(state.saveFailed) {
         if (state.saveFailed) {
-            snackbarHostState.showSnackbar("Couldn't save. Try again.")
+            snackbarHostState.showSnackbar(saveFailedText)
             viewModel.onSaveErrorShown()
         }
     }
@@ -71,10 +75,10 @@ fun HikeFormScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("New hike") },
+                title = { Text(stringResource(R.string.new_hike)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
             )
@@ -91,10 +95,10 @@ fun HikeFormScreen(
             OutlinedTextField(
                 value = state.routeName,
                 onValueChange = viewModel::onRouteNameChange,
-                label = { Text("Route name") },
+                label = { Text(stringResource(R.string.route_name)) },
                 singleLine = true,
                 supportingText = if (state.routeName.length >= HikeFormViewModel.SHOW_COUNTER_FROM) {
-                    { Text("${state.routeName.length}/${HikeFormViewModel.MAX_ROUTE_NAME}") }
+                    { Text(stringResource(R.string.char_counter, state.routeName.length, HikeFormViewModel.MAX_ROUTE_NAME)) }
                 } else {
                     null
                 },
@@ -107,7 +111,7 @@ fun HikeFormScreen(
                     value = state.date?.shortLabel() ?: "",
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text("Date") },
+                    label = { Text(stringResource(R.string.date)) },
                     modifier = Modifier.fillMaxWidth(),
                 )
                 TextButton(
@@ -116,7 +120,7 @@ fun HikeFormScreen(
                 ) {}
             }
 
-            Text("Difficulty", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.difficulty), style = MaterialTheme.typography.labelLarge)
             SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                 Difficulty.entries.forEachIndexed { index, difficulty ->
                     SegmentedButton(
@@ -127,12 +131,17 @@ fun HikeFormScreen(
                 }
             }
 
-            Text("Packing list starts from", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.list_starts_from), style = MaterialTheme.typography.labelLarge)
             val count = state.difficulty?.let { templateFor(it).size }
             FilterChip(
                 selected = true,
                 onClick = {},
-                label = { Text(if (count == null) "Day-hike basics" else "Day-hike basics ($count)") },
+                label = {
+                    Text(
+                        if (count == null) stringResource(R.string.template_basics)
+                        else stringResource(R.string.template_basics_count, count)
+                    )
+                },
             )
 
             Button(
@@ -140,7 +149,7 @@ fun HikeFormScreen(
                 enabled = state.canSave,
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.fillMaxWidth(),
-            ) { Text("Save hike") }
+            ) { Text(stringResource(R.string.save_hike)) }
         }
     }
 
@@ -158,10 +167,10 @@ fun HikeFormScreen(
                         viewModel.onDatePicked(Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate())
                     }
                     showDatePicker = false
-                }) { Text("OK") }
+                }) { Text(stringResource(R.string.ok)) }
             },
             dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) { Text("Cancel") }
+                TextButton(onClick = { showDatePicker = false }) { Text(stringResource(R.string.cancel)) }
             },
         ) {
             DatePicker(state = pickerState)

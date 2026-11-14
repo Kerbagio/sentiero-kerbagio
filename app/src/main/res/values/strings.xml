@@ -1,3 +1,40 @@
 <resources>
+    <!-- Launcher label is short so it isn't cut off; the full name shows inside the app. -->
     <string name="app_name">Sentiero</string>
+    <string name="app_full_name">Sentiero Kerbagio</string>
+
+    <!-- Shared -->
+    <string name="new_hike">New hike</string>
+    <string name="back">Back</string>
+
+    <!-- Upcoming -->
+    <string name="upcoming_title">Upcoming</string>
+    <string name="upcoming_empty">No hikes planned. Plan your next one.</string>
+    <!-- "Moderate · Sat 14 Nov · in 7 days" -->
+    <string name="upcoming_row_meta">%1$s · %2$s · %3$s</string>
+    <string name="packed_count">%1$d of %2$d packed</string>
+    <string name="relative_today">Today</string>
+    <string name="relative_tomorrow">Tomorrow</string>
+    <plurals name="relative_in_days">
+        <item quantity="one">in %d day</item>
+        <item quantity="other">in %d days</item>
+    </plurals>
+    <string name="relative_passed">Date passed</string>
+
+    <!-- New hike form -->
+    <string name="route_name">Route name</string>
+    <string name="char_counter">%1$d/%2$d</string>
+    <string name="date">Date</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="list_starts_from">Packing list starts from</string>
+    <string name="template_basics">Day-hike basics</string>
+    <string name="template_basics_count">Day-hike basics (%d)</string>
+    <string name="save_hike">Save hike</string>
+    <string name="save_failed">Couldn\'t save. Try again.</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Hike detail -->
+    <string name="packing_progress">Packing · %1$d of %2$d</string>
+    <string name="hike_not_found">This hike no longer exists.</string>
 </resources>

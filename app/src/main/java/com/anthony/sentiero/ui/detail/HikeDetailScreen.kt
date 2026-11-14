@@ -32,6 +32,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.anthony.sentiero.domain.PackingItem
+import androidx.compose.ui.res.stringResource
+import com.anthony.sentiero.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +49,7 @@ fun HikeDetailScreen(
                 title = {},
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
             )
@@ -57,8 +59,8 @@ fun HikeDetailScreen(
             HikeDetailUiState.Loading -> Unit
 
             HikeDetailUiState.NotFound -> Column(Modifier.padding(padding).padding(16.dp)) {
-                Text("This hike no longer exists.")
-                Button(onClick = onBack, shape = MaterialTheme.shapes.medium, modifier = Modifier.padding(top = 16.dp)) { Text("Back") }
+                Text(stringResource(R.string.hike_not_found))
+                Button(onClick = onBack, shape = MaterialTheme.shapes.medium, modifier = Modifier.padding(top = 16.dp)) { Text(stringResource(R.string.back)) }
             }
 
             is HikeDetailUiState.Content -> LazyColumn(
@@ -77,7 +79,7 @@ fun HikeDetailScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Text(
-                            "Packing · ${s.packed} of ${s.total}",
+                            stringResource(R.string.packing_progress, s.packed, s.total),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.padding(top = 24.dp),
                         )
