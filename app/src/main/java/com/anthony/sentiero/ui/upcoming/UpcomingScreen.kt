@@ -61,6 +61,9 @@ fun UpcomingScreen(
                     onClick = onNewHike,
                     icon = { Icon(Icons.Filled.Add, contentDescription = null) },
                     text = { Text("New hike") },
+                    // DESIGN.md: the FAB is the one filled primary action (Material defaults to primaryContainer).
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         },
