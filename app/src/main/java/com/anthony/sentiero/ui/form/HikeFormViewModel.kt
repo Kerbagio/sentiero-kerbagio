@@ -33,7 +33,7 @@ class HikeFormViewModel(private val repo: TripRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(HikeFormUiState())
     val uiState: StateFlow<HikeFormUiState> = _uiState.asStateFlow()
 
-    fun onRouteNameChange(value: String) = _uiState.update { it.copy(routeName = value) }
+    fun onRouteNameChange(value: String) = _uiState.update { it.copy(routeName = value.take(MAX_ROUTE_NAME)) }
     fun onDatePicked(value: LocalDate) = _uiState.update { it.copy(date = value) }
     fun onDifficultyPicked(value: Difficulty) = _uiState.update { it.copy(difficulty = value) }
 
@@ -48,6 +48,9 @@ class HikeFormViewModel(private val repo: TripRepository) : ViewModel() {
     }
 
     companion object {
+        const val MAX_ROUTE_NAME = 80
+        const val SHOW_COUNTER_FROM = 64 // the counter appears only near the limit (DR-6A)
+
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as SentieroApp

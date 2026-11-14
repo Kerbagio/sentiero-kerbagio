@@ -79,6 +79,11 @@ fun HikeFormScreen(
                 onValueChange = viewModel::onRouteNameChange,
                 label = { Text("Route name") },
                 singleLine = true,
+                supportingText = if (state.routeName.length >= HikeFormViewModel.SHOW_COUNTER_FROM) {
+                    { Text("${state.routeName.length}/${HikeFormViewModel.MAX_ROUTE_NAME}") }
+                } else {
+                    null
+                },
                 modifier = Modifier.fillMaxWidth(),
             )
 
