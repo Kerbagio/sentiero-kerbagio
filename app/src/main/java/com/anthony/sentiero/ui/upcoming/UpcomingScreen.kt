@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.anthony.sentiero.ui.RelativeDay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,7 +114,7 @@ private fun HikeRow(row: UpcomingRow, onClick: () -> Unit) {
             overflow = TextOverflow.Ellipsis,
         )
         Text(
-            "${row.difficulty} · ${row.dateLabel}",
+            "${row.difficulty} · ${row.dateLabel} · ${relativeText(row.relative)}",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -127,4 +128,12 @@ private fun HikeRow(row: UpcomingRow, onClick: () -> Unit) {
             modifier = Modifier.padding(top = 4.dp),
         )
     }
+}
+
+// Words for each RelativeDay (they move to strings.xml with the rest of the copy).
+private fun relativeText(relative: RelativeDay): String = when (relative) {
+    RelativeDay.Today -> "Today"
+    RelativeDay.Tomorrow -> "Tomorrow"
+    is RelativeDay.InDays -> "in ${relative.days} days"
+    RelativeDay.Passed -> "Date passed"
 }

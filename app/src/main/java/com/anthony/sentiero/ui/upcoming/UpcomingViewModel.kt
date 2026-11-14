@@ -12,17 +12,22 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.anthony.sentiero.SentieroApp
 import com.anthony.sentiero.data.TripRepository
 import com.anthony.sentiero.domain.label
+import com.anthony.sentiero.ui.RelativeDay
+import com.anthony.sentiero.ui.relativeDay
 import com.anthony.sentiero.ui.shortLabel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import java.time.Clock
+import java.time.LocalDate
 
 data class UpcomingRow(
     val id: String,
     val routeName: String,
     val difficulty: String,
     val dateLabel: String,
+    val relative: RelativeDay,
     val packed: Int,
     val total: Int,
 )
@@ -33,10 +38,11 @@ sealed interface UpcomingUiState {
     data class Content(val rows: List<UpcomingRow>) : UpcomingUiState
 }
 
-class UpcomingViewModel(repo: TripRepository) : ViewModel() {
+class UpcomingViewModel(repo: TripRepository, clock: Clock) : ViewModel() {
 
     val uiState: StateFlow<UpcomingUiState> = repo.observeUpcoming()
         .map { hikes ->
+            val today = LocalDate.now(clock) // read on every update, so "Today" moves at midnight
             if (hikes.isEmpty()) {
                 UpcomingUiState.Empty
             } else {
@@ -47,6 +53,7 @@ class UpcomingViewModel(repo: TripRepository) : ViewModel() {
                             routeName = it.hike.routeName,
                             difficulty = it.hike.difficulty.label,
                             dateLabel = it.hike.date.shortLabel(),
+                            relative = relativeDay(it.hike.date, today),
                             packed = it.packedCount,
                             total = it.totalCount,
                         )
@@ -60,7 +67,7 @@ class UpcomingViewModel(repo: TripRepository) : ViewModel() {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = this[APPLICATION_KEY] as SentieroApp
-                UpcomingViewModel(app.container.tripRepository)
+                UpcomingViewModel(app.container.tripRepository, app.container.clock)
             }
         }
     }
