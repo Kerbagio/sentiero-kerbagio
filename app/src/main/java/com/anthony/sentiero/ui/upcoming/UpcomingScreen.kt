@@ -74,7 +74,7 @@ fun UpcomingScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text("No hikes planned. Plan your next one.", style = MaterialTheme.typography.bodyLarge)
-                Button(onClick = onNewHike, modifier = Modifier.padding(top = 16.dp)) {
+                Button(onClick = onNewHike, shape = MaterialTheme.shapes.medium, modifier = Modifier.padding(top = 16.dp)) {
                     Text("New hike")
                 }
             }

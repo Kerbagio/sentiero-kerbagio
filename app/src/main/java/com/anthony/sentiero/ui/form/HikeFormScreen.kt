@@ -119,6 +119,7 @@ fun HikeFormScreen(
             Button(
                 onClick = { viewModel.save(onSaved) },
                 enabled = state.canSave,
+                shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.fillMaxWidth(),
             ) { Text("Save hike") }
         }

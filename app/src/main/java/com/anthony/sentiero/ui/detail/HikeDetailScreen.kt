@@ -58,7 +58,7 @@ fun HikeDetailScreen(
 
             HikeDetailUiState.NotFound -> Column(Modifier.padding(padding).padding(16.dp)) {
                 Text("This hike no longer exists.")
-                Button(onClick = onBack, modifier = Modifier.padding(top = 16.dp)) { Text("Back") }
+                Button(onClick = onBack, shape = MaterialTheme.shapes.medium, modifier = Modifier.padding(top = 16.dp)) { Text("Back") }
             }
 
             is HikeDetailUiState.Content -> LazyColumn(
