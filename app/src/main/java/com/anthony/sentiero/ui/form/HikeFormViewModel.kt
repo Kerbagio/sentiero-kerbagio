@@ -3,6 +3,7 @@
 // Save is allowed and asks the repository to create the hike.
 package com.anthony.sentiero.ui.form
 
+import android.database.sqlite.SQLiteException
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -24,6 +25,7 @@ data class HikeFormUiState(
     val date: LocalDate? = null,
     val difficulty: Difficulty? = null,
     val isSaving: Boolean = false,
+    val saveFailed: Boolean = false, // true until the "Couldn't save" snackbar has been shown
 ) {
     val canSave: Boolean
         get() = routeName.isNotBlank() && date != null && difficulty != null && !isSaving
@@ -44,10 +46,18 @@ class HikeFormViewModel(private val repo: TripRepository) : ViewModel() {
         if (!s.canSave) return // a second tap arrives here with isSaving = true and stops
         _uiState.update { it.copy(isSaving = true) } // set before the save starts, not inside it
         viewModelScope.launch {
-            val id = repo.createHike(s.routeName, s.date!!, s.difficulty!!)
-            onSaved(id)
+            try {
+                val id = repo.createHike(s.routeName, s.date!!, s.difficulty!!)
+                onSaved(id)
+            } catch (e: SQLiteException) {
+                // Only database errors: keep everything typed and let the user try again.
+                _uiState.update { it.copy(isSaving = false, saveFailed = true) }
+            }
         }
     }
+
+    /** The screen calls this once the "Couldn't save" snackbar has been shown. */
+    fun onSaveErrorShown() = _uiState.update { it.copy(saveFailed = false) }
 
     companion object {
         const val MAX_ROUTE_NAME = 80
