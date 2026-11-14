@@ -17,4 +17,17 @@ interface ChecklistDao {
 
     @Query("UPDATE checklist_items SET is_packed = :packed WHERE id = :itemId")
     suspend fun setPacked(itemId: String, packed: Boolean)
+
+    @Query("SELECT * FROM checklist_items WHERE id = :itemId")
+    suspend fun getItem(itemId: String): ChecklistItemEntity?
+
+    // One past the highest position; 0 when the list is empty.
+    @Query("SELECT COALESCE(MAX(position), -1) + 1 FROM checklist_items WHERE trip_id = :tripId")
+    suspend fun nextPosition(tripId: String): Int
+
+    @Insert
+    suspend fun insert(item: ChecklistItemEntity)
+
+    @Query("DELETE FROM checklist_items WHERE id = :itemId")
+    suspend fun delete(itemId: String)
 }

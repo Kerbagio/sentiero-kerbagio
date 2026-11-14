@@ -40,6 +40,11 @@ private class FakeTripRepository : TripRepository {
         setPackedCalls += itemId to packed
         items.value = items.value.map { if (it.id == itemId) it.copy(isPacked = packed) else it }
     }
+
+    // Not used by these tests; they only need to exist so the fake matches the interface.
+    override suspend fun addItem(tripId: String, label: String) = false
+    override suspend fun deleteItem(itemId: String): PackingItem? = null
+    override suspend fun restoreItem(tripId: String, item: PackingItem) = Unit
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)

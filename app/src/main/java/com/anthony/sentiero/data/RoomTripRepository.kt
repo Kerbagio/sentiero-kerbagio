@@ -3,6 +3,8 @@
 // (trip + items, all or nothing).
 package com.anthony.sentiero.data
 
+import android.database.sqlite.SQLiteConstraintException
+import android.util.Log
 import androidx.room.withTransaction
 import com.anthony.sentiero.data.local.ChecklistDao
 import com.anthony.sentiero.data.local.ChecklistItemEntity
@@ -17,6 +19,7 @@ import com.anthony.sentiero.domain.templateFor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate
+import java.util.UUID
 
 class RoomTripRepository(
     private val db: SentieroDatabase,
@@ -51,6 +54,51 @@ class RoomTripRepository(
 
     override suspend fun setPacked(itemId: String, packed: Boolean) =
         checklistDao.setPacked(itemId, packed)
+
+    override suspend fun addItem(tripId: String, label: String): Boolean {
+        val clean = label.trim()
+        if (clean.isEmpty()) return false
+        insertAppended(tripId, UUID.randomUUID().toString(), clean, forgotten = false, addedAfterHike = false)
+        return true
+    }
+
+    override suspend fun deleteItem(itemId: String): PackingItem? = db.withTransaction {
+        val item = checklistDao.getItem(itemId) ?: return@withTransaction null
+        checklistDao.delete(itemId)
+        item.toPackingItem()
+    }
+
+    override suspend fun restoreItem(tripId: String, item: PackingItem) {
+        try {
+            checklistDao.insert(
+                ChecklistItemEntity(
+                    id = item.id, tripId = tripId, label = item.label, isPacked = item.isPacked,
+                    position = item.position, forgotten = item.forgotten,
+                    carriedOver = item.carriedOver, addedAfterHike = item.addedAfterHike,
+                )
+            )
+        } catch (e: SQLiteConstraintException) {
+            // The hike was deleted before Undo was tapped: nothing to put the item back into.
+            Log.w("Sentiero/Db", "restoreItem skipped: hike $tripId is gone", e)
+        }
+    }
+
+    /**
+     * The one way to add an item at the end of a list (ENG-R8). The transaction makes
+     * "read the next position, then insert" one step, so two fast adds never share a position.
+     * The Mark-as-done sheet (2.6/2.10) reuses it with its own flags.
+     */
+    private suspend fun insertAppended(
+        tripId: String, id: String, label: String, forgotten: Boolean, addedAfterHike: Boolean,
+    ) = db.withTransaction {
+        val position = checklistDao.nextPosition(tripId)
+        checklistDao.insert(
+            ChecklistItemEntity(
+                id = id, tripId = tripId, label = label, position = position,
+                forgotten = forgotten, addedAfterHike = addedAfterHike,
+            )
+        )
+    }
 
     private fun TripEntity.toHike() = Hike(id, routeName, date, difficulty)
 

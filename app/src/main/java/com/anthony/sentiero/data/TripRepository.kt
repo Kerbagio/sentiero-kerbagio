@@ -20,4 +20,13 @@ interface TripRepository {
 
     /** Saves [packed] as-is (absolute value), so the last tap always wins. */
     suspend fun setPacked(itemId: String, packed: Boolean)
+
+    /** Appends an unpacked item at the end. Returns false (and writes nothing) if [label] is blank. */
+    suspend fun addItem(tripId: String, label: String): Boolean
+
+    /** Deletes the item and returns it as it was, for Undo; null if it was already gone. */
+    suspend fun deleteItem(itemId: String): PackingItem?
+
+    /** Undo: puts the item back with the same id, position and flags. */
+    suspend fun restoreItem(tripId: String, item: PackingItem)
 }
