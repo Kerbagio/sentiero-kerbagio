@@ -1,6 +1,6 @@
 // Data layer (Room): the SQL for the trips table. Reads return Flow, so Room re-emits
 // automatically whenever the tables change; writes are suspend functions.
-// Only TripRepository calls this; ViewModels never touch DAOs.
+// Only RoomTripRepository calls this; ViewModels never touch DAOs.
 package com.anthony.sentiero.data.local
 
 import androidx.room.Dao

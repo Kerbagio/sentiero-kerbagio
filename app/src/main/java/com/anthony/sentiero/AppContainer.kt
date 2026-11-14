@@ -5,11 +5,12 @@ package com.anthony.sentiero
 
 import android.content.Context
 import androidx.room.Room
+import com.anthony.sentiero.data.RoomTripRepository
 import com.anthony.sentiero.data.TripRepository
 import com.anthony.sentiero.data.local.SentieroDatabase
 
 class AppContainer(context: Context) {
     private val db = Room.databaseBuilder(context, SentieroDatabase::class.java, "sentiero.db").build()
 
-    val tripRepository = TripRepository(db, db.tripDao(), db.checklistDao())
+    val tripRepository: TripRepository = RoomTripRepository(db, db.tripDao(), db.checklistDao())
 }
