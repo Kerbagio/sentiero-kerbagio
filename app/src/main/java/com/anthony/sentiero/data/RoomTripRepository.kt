@@ -33,7 +33,7 @@ class RoomTripRepository(
 
     override fun observeItems(tripId: String): Flow<List<PackingItem>> =
         checklistDao.observeItems(tripId).map { items ->
-            items.map { PackingItem(it.id, it.label, it.isPacked) }
+            items.map { it.toPackingItem() }
         }
 
     /** Saves the hike and its starting packing list together. Returns the new hike's id. */
@@ -53,4 +53,7 @@ class RoomTripRepository(
         checklistDao.setPacked(itemId, packed)
 
     private fun TripEntity.toHike() = Hike(id, routeName, date, difficulty)
+
+    private fun ChecklistItemEntity.toPackingItem() =
+        PackingItem(id, label, isPacked, position, forgotten, carriedOver, addedAfterHike)
 }

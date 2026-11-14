@@ -22,4 +22,13 @@ data class Hike(
 /** One row on the Upcoming list: the hike plus how much of its list is packed. */
 data class HikeSummary(val hike: Hike, val packedCount: Int, val totalCount: Int)
 
-data class PackingItem(val id: String, val label: String, val isPacked: Boolean)
+/** One row of a packing list. The flags are used from Spec 2 on (memory tag, journal). */
+data class PackingItem(
+    val id: String,
+    val label: String,
+    val isPacked: Boolean,
+    val position: Int = 0,
+    val forgotten: Boolean = false,
+    val carriedOver: Boolean = false,
+    val addedAfterHike: Boolean = false,
+)
