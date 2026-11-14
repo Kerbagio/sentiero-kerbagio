@@ -36,7 +36,7 @@ Anything not built by the deadline is dropped from the end of P3: the reminder (
 ## Week 1 — Mon 2 – Sun 8 Nov · Midterm: create a hike, tick it, survive a restart (Spec 1)
 **Planned: 15.5 h** (5.5 h over the assumption; the date is fixed)
 - [x] Project setup: Empty Activity (Compose), minSdk 26, Kotlin serialization + KSP, Room / Navigation / lifecycle dependencies, schema export (1.5 h)
-- [ ] Theme from DESIGN.md: colors (dynamic color off), bundled fonts + OFL files, type scale, shapes (1.5 h)
+- [x] Theme from DESIGN.md: colors (dynamic color off), bundled fonts + OFL files, type scale, shapes (1.5 h)
 - [x] Room: the full v1 entities, converters, DAOs with the aggregate Upcoming query, database (2 h)
 - [x] Domain models, `templateFor`, `createHike` in one transaction, AppContainer, SentieroApp (1.5 h)
 - [x] ViewModels: Upcoming; HikeForm (validation, 80-char cap, double-tap guard); HikeDetail (absolute ticks) (2 h)
@@ -57,7 +57,7 @@ Anything not built by the deadline is dropped from the end of P3: the reminder (
 
 ## Week 2 — Mon 9 – Sun 15 Nov · Finish the midterm properly, edit the checklist, build the weather data layer
 **Planned: 13.5 h** (the midterm was built bare; 2.7 Delete moved to week 5)
-- [ ] Midterm catch-up: the DESIGN.md theme (colors, bundled fonts, type, shapes) (1.5 h)
+- [x] Midterm catch-up: the DESIGN.md theme (colors, bundled fonts, type, shapes) (1.5 h)
 - [ ] Midterm catch-up: TemplatesTest, HikeDetailViewModelTest, TripDaoTest (2 h)
 - [ ] Midterm catch-up: copy into strings.xml, 80-char cap + counter, double-tap guard, "Couldn't save" snackbar, relative date labels (1 h)
 - [ ] 2.1 Repository: `addItem` (appends inside a transaction), `deleteItem` / `restoreItem` (1 h)
