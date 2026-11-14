@@ -30,8 +30,8 @@ Spec 1 (bare) → midterm catch-up → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2
 Anything not built by the deadline is dropped from the end of P3: the reminder (2.16) first, then Completed search, Edit hike, Edit journal, Move back.
 
 ## Today, Sun 1 Nov (about 45 min, before week 1)
-- [ ] Email the professor one line that makes the API official: "For topic 8 I'll use the Open-Meteo forecast and geocoding APIs (free, no key) for weather; I found no free trail-data API." (15 min)
-- [ ] Create the private GitHub repo and push the planning docs (`docs/`, `DESIGN.md`, `TODOS.md`, this file) as the first commit (30 min)
+- ~~Email the professor one line that makes the API official: "For topic 8 I'll use the Open-Meteo forecast and geocoding APIs (free, no key) for weather; I found no free trail-data API." (15 min)~~ Skipped: Open-Meteo is announced at the midterm presentation instead (demo script step 1).
+- [x] Create the private GitHub repo and push the planning docs (`docs/`, `DESIGN.md`, `TODOS.md`, this file) as the first commit (30 min)
 
 ## Week 1 — Mon 2 – Sun 8 Nov · Midterm: create a hike, tick it, survive a restart (Spec 1)
 **Planned: 15.5 h** (5.5 h over the assumption; the date is fixed)
