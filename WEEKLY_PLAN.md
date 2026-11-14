@@ -39,12 +39,12 @@ Anything not built by the deadline is dropped from the end of P3: the reminder (
 - [ ] Theme from DESIGN.md: colors (dynamic color off), bundled fonts + OFL files, type scale, shapes (1.5 h)
 - [x] Room: the full v1 entities, converters, DAOs with the aggregate Upcoming query, database (2 h)
 - [x] Domain models, `templateFor`, `createHike` in one transaction, AppContainer, SentieroApp (1.5 h)
-- [ ] ViewModels: Upcoming; HikeForm (validation, 80-char cap, double-tap guard); HikeDetail (absolute ticks) (2 h)
+- [x] ViewModels: Upcoming; HikeForm (validation, 80-char cap, double-tap guard); HikeDetail (absolute ticks) (2 h)
 - [x] Screens: Upcoming and the New hike form (1.5 h)
-- [ ] Screen: Hike detail checklist, with all copy in strings.xml (1.5 h)
+- [x] Screen: Hike detail checklist, with all copy in strings.xml (1.5 h)
 - [x] Navigation: typed routes; Save opens the new hike and pops the form (1 h)
 - [ ] Tests: TemplatesTest, HikeDetailViewModelTest, TripDaoTest; manual restart and rotation runs (2 h)
-- [ ] Rehearse the 5-minute demo with Database Inspector open; tag `midterm-demo` and keep its APK (1 h)
+- [x] Rehearse the 5-minute demo with Database Inspector open; tag `midterm-demo` and keep its APK (1 h)
 
 
 **Done when:** on a fresh install, "Jabal Moussa Reserve", Sat 14 Nov, Moderate opens with 12 items. You tick 3, force-stop, reopen, and see the same 3 ticks. The 3 tests are green, `midterm-demo` is tagged, and the rehearsal fits in 5 minutes.
