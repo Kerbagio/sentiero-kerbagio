@@ -57,8 +57,20 @@ The short version of `MIDTERM_DEFENSE.md`. Read it the morning of the demo.
 **If he asks "is that realistic?"**
 > "It follows a written plan with hours for each task, about 18 hours a week. The order matters: the brief's features are done first, in week 5. If I run late, I drop from the end. The reminder goes first, and nothing new starts after the 17th."
 
-**If he asks "why the reminder last?"**
-> "It's the most expensive item and the riskiest: notification permission, WorkManager, battery limits. And it's optional, so it's first to drop."
+**If he asks "why is the reminder last?"**
+1. **It depends on three other features** (2.6, 2.7, 2.14). Mark as done must cancel it, delete hike must cancel it, and edit hike must move it when the date changes. Built last, it's written once, against the finished app.
+2. **It's not in the brief.** It's P3, an extra; the brief's four bullets are P1.
+3. **It's the most expensive and riskiest task:** ~8 h, plus WorkManager, a notification channel, a runtime permission and battery limits.
+4. **It's the first thing dropped.** Nothing depends on it, so if it isn't working by Thu 17 Dec, it's dropped and the app is still complete.
+> "The reminder depends on Mark as done, Delete and Edit, since each has to cancel or move it. It's also optional, the most expensive, and the riskiest. So it goes last, and if time runs out it's the first thing I drop, without breaking anything."
+
+**If he asks "what battery limits?"**
+- **Doze:** when the phone is still with the screen off, background jobs wait for short maintenance windows.
+- **App Standby buckets:** apps you rarely open get fewer chances to run in the background.
+- **Phone-maker battery savers:** Samsung's "Put unused apps to sleep" (my Galaxy A13) can delay the reminder or block it.
+- **WorkManager isn't an alarm clock:** it guarantees the job runs *eventually*, even after a reboot, but not at an exact minute. Exact alarms need another special permission on Android 12+, which is too much for a packing reminder.
+- **Notifications:** Android 13+ needs `POST_NOTIFICATIONS`. I ask only when the user turns the reminder on, I handle "No" ("Notifications are off for Sentiero. [Open settings]"), and I create a notification channel (required since Android 8).
+> "WorkManager makes sure the reminder runs even if the app is closed or the phone restarts, but Android delays background work to save battery, so the app says 'around 18:00', not an exact time. A packing reminder a few minutes late is fine, and it's not a safety feature."
 
 ---
 
