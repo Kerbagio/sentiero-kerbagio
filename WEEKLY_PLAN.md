@@ -2,7 +2,14 @@
 
 Written 2026-11-01. It is built from the approved design doc (`docs/designs/hiking-trip-planner.md`), `docs/plan.md`, Spec 1 (`docs/specs/01-midterm-slice.md`) and Spec 2 (`docs/specs/02-rest-of-mvp.md`). Nothing is built yet (no commits). Task numbers 2.1-2.17 are Spec 2's child issues, and their hours come from the specs.
 
-## Assumptions
+## Re-plan, Mon 23 Nov
+The real dates: **the midterm presentation is Tue 24 Nov** (the slice is built, and the deck and README are ready), and **the final is around Sun 20 Dec**. Weeks 1-2 are kept below as history. Weeks 3-5 are replaced by weeks 4-7.
+
+- **About 9-10 hours a week, without rushing.** What's left of P1 + release is ~33 h over 4 weeks, so P1 fits with a little room.
+- **The cut line is P1 + release.** P2 (the loop) starts only if P1 is finished early. P3 is not planned.
+- **The last week stays calm:** finishing Mark as done, delete hike, hardening and rehearsal. No new screens after Sun 13 Dec.
+
+## Original assumptions (1 Nov, kept for history)
 - **10 hours a week.** You didn't say how many hours you have, so this is the default. The budget check below shows what it buys.
 - **5 weeks, Mon 2 Nov – Sun 6 Dec,** instead of the default 4, because the design doc assumes the final around Sun 6 Dec. When the real date is announced, I re-plan.
 - **Week 1 is the midterm** (Spec 1), due on or before Sun 8 Nov. That date is fixed, so week 1 is planned at what the midterm needs, not at 10 h.
@@ -43,7 +50,7 @@ Anything not built by the deadline is dropped from the end of P3: the reminder (
 - [x] Screens: Upcoming and the New hike form (1.5 h)
 - [x] Screen: Hike detail checklist, with all copy in strings.xml (1.5 h)
 - [x] Navigation: typed routes; Save opens the new hike and pops the form (1 h)
-- [ ] Tests: TemplatesTest, HikeDetailViewModelTest, TripDaoTest; manual restart and rotation runs (2 h)
+- [x] Tests: TemplatesTest, HikeDetailViewModelTest, TripDaoTest; manual restart and rotation runs (2 h) *(done in the week 2 catch-up)*
 - [x] Rehearse the 5-minute demo with Database Inspector open; tag `midterm-demo` and keep its APK (1 h)
 
 
@@ -60,13 +67,8 @@ Anything not built by the deadline is dropped from the end of P3: the reminder (
 - [x] Midterm catch-up: the DESIGN.md theme (colors, bundled fonts, type, shapes) (1.5 h)
 - [x] Midterm catch-up: TemplatesTest, HikeDetailViewModelTest, TripDaoTest (2 h)
 - [x] Midterm catch-up: copy into strings.xml, 80-char cap + counter, double-tap guard, "Couldn't save" snackbar, relative date labels (1 h)
-- [ ] 2.1 Repository: `addItem` (appends inside a transaction), `deleteItem` / `restoreItem` (1 h)
-- [ ] 2.1 UI: "+ Add item" field, ✕ with Undo snackbar, zero-items state (2 h)
-- [ ] 2.1 Tests: RoomTripRepositoryTest ×2 (1 h)
-- [ ] 2.2 Retrofit + kotlinx converter, INTERNET permission, AppContainer wiring (1 h)
-- [ ] 2.2 `GeocodingApi`, `ForecastApi`, DTOs with nullable fields (1 h)
-- [ ] 2.2 `OpenMeteoWeatherRepository`: mapping, rounding, failure classes, `Sentiero/Weather` log (1.5 h)
-- [ ] 2.2 Fixtures (capture Tripoli with curl) + JsonFixturesTest, WeatherRepositoryTest, PlaceTest (1.5 h)
+- 2.1 Checklist editing: built on 14 Nov, waiting for its Accept check → moved to week 4
+- 2.2 Weather data layer: not started → moved to week 4
 
 
 **Done when:** the app uses the DESIGN.md theme and Spec 1's 3 tests pass; adding, deleting and Undo work on the emulator; `./gradlew test` passes the 12 new weather tests.
@@ -77,8 +79,27 @@ Anything not built by the deadline is dropped from the end of P3: the reminder (
 
 **Next if you have time:** start 2.3 (week 3).
 
-## Week 3 — Mon 16 – Sun 22 Nov · P1: area search and the forecast panel, every API state
-**Planned: 11 h**
+## Week 3 — Mon 16 – Sun 22 Nov
+No planned work was done this week. 2.1 had already been built on 14 Nov; 2.2-2.4 move to weeks 4-6.
+
+## Week 4 — Mon 23 – Sun 29 Nov · Midterm presentation, then the weather data layer
+**Planned: ~6.5 h** (light: the presentation is on Tuesday)
+- [x] Deck cut to 6 slides for the brief, README written, repo pushed and made public (Mon 23 Nov)
+- [ ] **Tue 24 Nov: present the midterm** (deck: `presentation/Sentiero-Midterm.pptx`, notes: `docs/MIDTERM_CHEATSHEET.md`)
+- [ ] 2.1 Accept check on the phone: add an item, delete it, Undo, zero-items text; then tick it here (0.5 h)
+- [ ] 2.2 Retrofit + kotlinx converter, INTERNET permission, AppContainer wiring (1 h)
+- [ ] 2.2 `GeocodingApi`, `ForecastApi`, DTOs with nullable fields (1 h)
+- [ ] 2.2 `OpenMeteoWeatherRepository`: mapping, rounding, failure classes, `Sentiero/Weather` log (1.5 h)
+- [ ] 2.2 Fixtures (capture Tripoli with curl) + JsonFixturesTest, WeatherRepositoryTest, PlaceTest (1.5 h)
+
+**Done when:** the midterm is presented, 2.1 is ticked, and `./gradlew test` passes the new weather tests.
+
+**Top risk:** the converter or JSON setup fights you.
+
+**Fallback:** fixtures and fake APIs keep every test offline. If 2.2 runs over, finish it on Monday of week 5; nothing else needs it before 2.3.
+
+## Week 5 — Mon 30 Nov – Sun 6 Dec · Area search and the forecast panel, every API state
+**Planned: ~10 h**
 - [ ] 2.3 `AreaSearchState`: search on submit, 2-letter minimum, cancel the previous job (1.5 h)
 - [ ] 2.3 `AreaSearchField`: Editing / Picked, results, Empty / Error + Retry (1.5 h)
 - [ ] 2.3 Form: "Area (optional)", the "No place selected" hint, area saved on create (1 h)
@@ -86,68 +107,54 @@ Anything not built by the deadline is dropped from the end of P3: the reminder (
 - [ ] 2.4 `ForecastCardPolicy` + ForecastCardPolicyTest ×6 (1 h)
 - [ ] 2.4 HikeDetailViewModel forecast state (key, job, Retry) + HikeDetailViewModelTest ×3 (2 h)
 - [ ] 2.4 `ForecastPanel`: every state at one minimum height, values line with UV, attribution (2 h)
-- [ ] 2.4 Add-area sheet (1 h)
 
-
-**Done when:** every weather state can be shown on demand:
+**Done when:**
 - "Faraya" makes you pick (Guinea is listed first), and "zzqx" shows the Empty text.
 - In airplane mode the panel shows "Couldn't load the forecast." and "You're offline.", and Retry recovers after you reconnect.
 - A hike with an area dated today + 16 shows "Forecast available from …".
-- A hike with no area offers Add area.
 - A past-dated hike shows no panel.
 
 **Top risk:** async state bugs: out-of-order results, refetching on rotation, a Loading state that never ends.
 
-**Fallback:** AreaSearchStateTest's gated fake reproduces ordering bugs, so fix them in the test first. If the Add-area sheet runs over, it moves to week 4; the No-area text already shows.
+**Fallback:** AreaSearchStateTest's gated fake reproduces ordering bugs, so fix them in the test first. If the panel runs over, it moves to Monday of week 6.
 
-**Next if you have time:** 2.5 (week 4), then 2.8 Suggestion chips (P2, 4 h), whose dependencies 2.1 and 2.4 are done.
-
-## Week 4 — Mon 23 – Sun 29 Nov · P1: Completed tab and Mark as done, which completes the brief
-**Planned: 12 h**
+## Week 6 — Mon 7 – Sun 13 Dec · Completed tab and the journal behind Mark as done
+**Planned: ~10 h**
+- [ ] 2.4 Add-area sheet (1 h)
 - [ ] 2.5 `observeCompleted` query + mapping + TripDaoTest ×3 (1 h)
 - [ ] 2.5 `Completed` route, bottom bar, `openTab` (1 h)
 - [ ] 2.5 CompletedScreen + ViewModel (rows, empty state), `shortDate` + DateLabelsTest (1.5 h)
 - [ ] 2.5 Journal mode (read-only) + due rows on Upcoming (1.5 h)
 - [ ] 2.6 Repository: `journalSource`, the `saveJournal` transaction, `reopenHike` + tests ×3 (2 h)
 - [ ] 2.6 MarkDoneViewModel (draft, `hasChanges`, double-tap guard) + tests ×3 (2 h)
+
+**Done when:** a hike with no area offers Add area, the Completed tab and journal mode work, and the journal repository and ViewModel tests pass.
+
+**Top risk:** the journal transaction and its Undo are the trickiest data code in the app.
+
+**Fallback:** the tests come first. If the week runs over, the due rows on Upcoming move to Monday of week 7.
+
+## Week 7 — Mon 14 – Sun 20 Dec · Finish Mark as done, harden, rehearse (final ~Sun 20 Dec)
+**Planned: ~10 h, no new screens after Wednesday**
 - [ ] 2.6 MarkDoneSheet + the discard gate (2 h)
 - [ ] 2.6 Both hosts (pinned button on detail, row button on Upcoming) + Undo snackbar; tag `p1-complete` (1 h)
-
-
-**Done when:**
-- A hike dated today can be marked done from its row and from its detail.
-- It moves to Completed with its notes and "Forgot: …", and Undo brings it back.
-- Swipe, Back and a scrim tap with typed notes all ask "Discard your notes?".
-- `p1-complete` is tagged: all four brief bullets work.
-
-**Top risk:** the sheet (draft, discard gate, two hosts) is the most complex UI in the app.
-
-**Fallback:** ship the detail host first. The Upcoming row button reuses the same sheet and can move into week 5's buffer.
-
-**Next if you have time:** P2 in order: 2.8 Chips (4 h) → 2.9 Start from last hike (6 h) → 2.10 Add something you forgot (4 h) → 2.11 Same-route note (2 h) → tag `p2-complete`.
-
-## Week 5 — Mon 30 Nov – Sun 6 Dec · Release, rehearse, buffer (final assumed ~Sun 6 Dec)
-**Planned: 7 h + about 3 h buffer**
 - [ ] 2.7 Delete hike: ⋮ menu, confirmation dialog, cascade, `Deleted` state, cascade test (2 h)
 - [ ] 2.17 Accessibility: 10-minute TalkBack pass, 200% font, 48dp targets (1 h)
 - [ ] 2.17 Rotation at the 3 points, the 3 log tags, greps for catch-alls and the word "trip" (1 h)
-- [ ] 2.17 README (what it does, how to run it, tests, API, scope) and a permissions review: INTERNET only, plus POST_NOTIFICATIONS only if 2.16 shipped (1 h)
-- [ ] 2.17 Tag `final-demo`, attach the APK to a GitHub release, give the professor repo access (0.5 h)
+- [ ] 2.17 Update the README (weather, Completed, journal) and a permissions review: INTERNET only (0.5 h)
+- [ ] 2.17 Tag `final-demo`, attach the APK to a GitHub release (0.5 h)
 - [ ] Rehearse the final demo twice, timed, with Spec 2's states-on-demand recipes and defense notes (1.5 h)
-- [ ] *(optional)* Draw the architecture and one data flow for the defense (0.5 h)
-- [ ] *(optional)* Write a short report, only if the course asks for one (1 h)
 
+**Done when:** all four brief bullets work (`p1-complete`), the 2.17 checklist is ticked, the demo has been rehearsed twice, and `final-demo` is tagged with its APK.
 
-**Done when:** the 2.17 checklist is ticked, the demo has been rehearsed twice, `final-demo` is tagged with its APK, and the professor can open the repo.
+**Top risk:** weeks 4-6 slip and squeeze the rehearsal.
 
-**Top risk:** slippage from weeks 2-4 eats the buffer, or the final date lands before 6 Dec.
+**Fallback:** if you're behind on Wed 16 Dec, cut in this order: first the Upcoming row host of Mark as done (the detail host is enough), then 2.7 Delete hike. Never cut the rehearsal or the README update. Start nothing new after Thu 17 Dec.
 
-**Fallback:** the buffer goes to P1 leftovers first. Don't start a P3 item in the last 3 days. If the date moves, re-plan; everything up to `p1-complete` is the brief.
-
-**Next if you have time:** finish P2, then P3 in build order (2.12 → 2.16). Anything not built by the deadline is dropped, reminder first.
+**Next if you have time (any week, only after `p1-complete`):** P2 in order: 2.8 Chips (4 h) → 2.9 Start from last hike (6 h) → 2.10 Add something you forgot (4 h) → 2.11 Same-route note (2 h).
 
 ## Re-plan when
-- The final date is announced.
+- The final date changes.
 - Any week ends more than 3 h behind.
 - The professor rejects Open-Meteo.
 
