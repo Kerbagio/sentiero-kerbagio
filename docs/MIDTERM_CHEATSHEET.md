@@ -26,7 +26,43 @@ The short version of `MIDTERM_DEFENSE.md`. Read it the morning of the demo.
 
 ---
 
-## 3. The layers (slide 7)
+## 2b. The deck, slide by slide (6 slides)
+
+| # | Slide | Say in one line |
+|---|---|---|
+| 1 | Title · "For people who plan and pack for their own day hikes" | "Sentiero means trail in Italian. It's for people who plan and pack for their own day hikes." |
+| 2 | The problem, the value, the midterm goal | "Hikers pack from memory. My feature gives each hike a ready list, tick by tick, saved on the phone." |
+| 3 | The feature · Plan a hike, then pack it | Form (route, date, difficulty, Save grey until complete) → 10/12/14 items → every tick saved → "3 of 12". |
+| 4 | Upcoming hikes, saved on the phone | Sorted by date, "3 of 12 packed" from one SQL query, Back goes home, still 3/12 after a force-stop. |
+| 5 | How it's built | Screens → ViewModel → Repository → DAO → SQLite. One tick, end to end. Events go up, state comes down. |
+| 6 | Done since the demo, and what's next | See below. |
+
+**Slide 6, left column: built since the midterm demo.** If he asks you to show one, open a hike and add an item, then delete it and tap Undo.
+- **DESIGN.md theme:** my own colors and two bundled fonts (Barlow Condensed, Source Sans 3), not Android Studio's default.
+- **Add your own items, delete with Undo:** a new item goes at the end. Undo puts it back in the same place, with the same tick and the same id.
+- **"Today", "Tomorrow", "in 5 days" labels** on Upcoming, plus "Date passed" for past hikes.
+- **Safer Save:** the name is capped at 80 characters with a counter, a double tap can't save twice (`isSaving`), and a database error shows "Couldn't save. Try again." and keeps what you typed.
+- **4 test files:** `TemplatesTest` and `HikeDetailViewModelTest` run on the JVM; `TripDaoTest` and `RoomTripRepositoryTest` run on a device.
+- **README and a public GitHub repo.**
+
+**Slide 6, right column: next, week by week.**
+
+| Week | What | Why it matters |
+|---|---|---|
+| 4 · 24–29 Nov | Weather: Open-Meteo, area search, forecast panel | The first API, with loading, error, offline + Retry |
+| 5 · 30 Nov – 6 Dec | Completed tab, Mark as done + journal, delete hike, then weather chips | **The whole brief works** (`p1-complete`). Chips: rain likely → "+ Rain jacket" |
+| 6 · 7–13 Dec | Start from last hike, add what you forgot, same-route note; edit hike and journal | The loop: what you forgot comes first next time (`p2-complete`) |
+| 7 · 14–20 Dec | Search, evening-before reminder, final checks, release | Final ~20 Dec |
+
+**If he asks "is that realistic?"**
+> "It follows a written plan with hours for each task, about 18 hours a week. The order matters: the brief's features are done first, in week 5. If I run late, I drop from the end. The reminder goes first, and nothing new starts after the 17th."
+
+**If he asks "why the reminder last?"**
+> "It's the most expensive item and the riskiest: notification permission, WorkManager, battery limits. And it's optional, so it's first to drop."
+
+---
+
+## 3. The layers (slide 5)
 
 ```
 Screens (Compose) → ViewModel (StateFlow) → Repository → DAO (Room) → SQLite file sentiero.db
@@ -47,7 +83,7 @@ Screens (Compose) → ViewModel (StateFlow) → Repository → DAO (Room) → SQ
 
 ---
 
-## 4. One tick, end to end (say it while pointing at slide 7)
+## 4. One tick, end to end (say it while pointing at slide 5)
 
 Tap → `Modifier.toggleable` gives the new value → callback `onTick(item.id, true)` → `HikeDetailViewModel.onTick` → `viewModelScope.launch { repo.setPacked(...) }` → `ChecklistDao.setPacked`: `UPDATE checklist_items SET is_packed = 1 WHERE id = ?` → Room sees the table changed and the `Flow` emits a new list → `combine` builds the new `UiState` → `StateFlow` → `collectAsStateWithLifecycle()` → the screen recomposes: checkbox ticked, "3 of 12", the bar moves.
 
@@ -62,7 +98,7 @@ Local (Room) = data the user creates. On the phone, offline, instant. API (Open-
 Works offline (no signal at trailheads), instant, survives the app being killed.
 
 **"Local storage is just temporary"**
-*Memory* is temporary: variables, the ViewModel. Room writes a *file* on the phone, so it survives force-stop (slide 6). Its real limit: uninstalling the app or clearing its data removes it, and it doesn't sync between phones. That's fine for a personal list; syncing would need a server, which is out of scope.
+*Memory* is temporary: variables, the ViewModel. Room writes a *file* on the phone, so it survives force-stop (slide 4). Its real limit: uninstalling the app or clearing its data removes it, and it doesn't sync between phones. That's fine for a personal list; syncing would need a server, which is out of scope.
 
 **ViewModel vs Room?**
 The ViewModel survives rotation, but not the app being killed. Room survives both.
