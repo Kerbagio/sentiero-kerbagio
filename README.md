@@ -38,13 +38,14 @@ From the command line instead:
 ## Tests
 
 ```
-./gradlew test                  # JVM unit tests: TemplatesTest, HikeDetailViewModelTest
+./gradlew test                  # JVM unit tests: TemplatesTest, HikeDetailViewModelTest, PlaceTest,
+                                #   JsonFixturesTest, WeatherRepositoryTest (offline: saved JSON + fake APIs)
 ./gradlew connectedAndroidTest  # on a device: TripDaoTest, RoomTripRepositoryTest
 ```
 
 ## How it's built
 
-Kotlin, Jetpack Compose, Material 3, Navigation Compose (type-safe routes), ViewModel + StateFlow, and Room.
+Kotlin, Jetpack Compose, Material 3, Navigation Compose (type-safe routes), ViewModel + StateFlow, Room, and Retrofit with kotlinx.serialization for the Open-Meteo weather API (free, no key; the weather data layer is built, its screens come next).
 
 ```
 Screens (Compose) → ViewModel (StateFlow) → Repository → DAO (Room) → sentiero.db on the phone
@@ -53,7 +54,7 @@ Screens (Compose) → ViewModel (StateFlow) → Repository → DAO (Room) → se
 | Folder | What's in it |
 |---|---|
 | `app/src/main/java/com/anthony/sentiero/ui/` | The three screens, their ViewModels, and navigation |
-| `app/src/main/java/com/anthony/sentiero/data/` | The repository, plus the Room database, entities and DAOs in `local/` |
+| `app/src/main/java/com/anthony/sentiero/data/` | The repositories, plus the Room database, entities and DAOs in `local/`, and the Open-Meteo Retrofit interfaces and JSON types in `remote/` |
 | `app/src/main/java/com/anthony/sentiero/domain/` | Plain models and the starting packing lists (`Templates.kt`) |
 | `docs/` | Design document, specs and plan |
 
