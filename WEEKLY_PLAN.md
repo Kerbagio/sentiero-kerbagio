@@ -99,10 +99,10 @@ No planned work was done this week. 2.1 had already been built on 14 Nov; 2.2-2.
 - [x] 2.2 `GeocodingApi`, `ForecastApi`, DTOs with nullable fields (1 h)
 - [x] 2.2 `OpenMeteoWeatherRepository`: mapping, rounding, failure classes, `Sentiero/Weather` log (1.5 h)
 - [x] 2.2 Fixtures (capture Tripoli with curl) + JsonFixturesTest, WeatherRepositoryTest, PlaceTest (1.5 h) *(done Sat 28 Nov: 17/17 JVM tests green, no catch-alls; Accept 3, the airplane-mode log line, is checked on the phone with 2.4)*
-- [ ] 2.3 `AreaSearchState`: search on submit, 2-letter minimum, cancel the previous job (1.5 h)
-- [ ] 2.3 `AreaSearchField`: Editing / Picked, results, Empty / Error + Retry (1.5 h)
-- [ ] 2.3 Form: "Area (optional)", the "No place selected" hint, area saved on create (1 h)
-- [ ] 2.3 Tests: AreaSearchStateTest ×4, HikeFormViewModelTest ×1 (1 h)
+- [x] 2.3 `AreaSearchState`: search on submit, 2-letter minimum, cancel the previous job (1.5 h)
+- [x] 2.3 `AreaSearchField`: Editing / Picked, results, Empty / Error + Retry (1.5 h)
+- [x] 2.3 Form: "Area (optional)", the "No place selected" hint, area saved on create (1 h)
+- [x] 2.3 Tests: AreaSearchStateTest ×4, HikeFormViewModelTest ×1 (1 h) *(Accept 1-8 checked on the phone Sat 28 Nov over adb; 22/22 JVM tests green; picked area confirmed in the database)*
 - [ ] 2.4 `ForecastCardPolicy` + ForecastCardPolicyTest ×6 (1 h)
 - [ ] 2.4 HikeDetailViewModel forecast state (key, job, Retry) + HikeDetailViewModelTest ×3 (2 h)
 - [ ] 2.4 `ForecastPanel`: every state at one minimum height, values line with UV, attribution (2 h)
