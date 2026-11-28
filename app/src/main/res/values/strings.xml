@@ -34,6 +34,17 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
+    <!-- Area field (2.3) -->
+    <string name="area_label">Area (optional)</string>
+    <string name="area_helper">Pick the village nearest the trailhead. Mountain weather can differ from the coast.</string>
+    <string name="area_unpicked_hint">No place selected. The hike saves without a forecast.</string>
+    <string name="area_too_short">Type at least 2 letters.</string>
+    <string name="area_search">Search places</string>
+    <string name="area_clear">Clear area</string>
+    <string name="area_no_match">No places found for \'%1$s\'. Try the nearest village or town.</string>
+    <string name="area_search_failed">Couldn\'t search right now.</string>
+    <string name="retry">Retry</string>
+
     <!-- Hike detail -->
     <string name="packing_progress">Packing · %1$d of %2$d</string>
     <string name="hike_not_found">This hike no longer exists.</string>
