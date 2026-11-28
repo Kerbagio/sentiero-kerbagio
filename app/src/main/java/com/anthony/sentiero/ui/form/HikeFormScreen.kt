@@ -95,6 +95,7 @@ fun HikeFormScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             OutlinedTextField(
+                shape = MaterialTheme.shapes.small, // DESIGN.md: text fields use sm corners
                 value = state.routeName,
                 onValueChange = viewModel::onRouteNameChange,
                 label = { Text(stringResource(R.string.route_name)) },
@@ -110,6 +111,7 @@ fun HikeFormScreen(
             // A read-only field that opens the date dialog when tapped.
             Box {
                 OutlinedTextField(
+                    shape = MaterialTheme.shapes.small, // DESIGN.md: text fields use sm corners
                     value = state.date?.shortLabel() ?: "",
                     onValueChange = {},
                     readOnly = true,

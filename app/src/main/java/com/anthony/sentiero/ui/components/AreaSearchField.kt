@@ -45,6 +45,7 @@ fun AreaSearchField(
 ) {
     when (ui) {
         is AreaFieldUi.Picked -> OutlinedTextField(
+            shape = MaterialTheme.shapes.small, // DESIGN.md: text fields use sm corners
             value = ui.area.label,
             onValueChange = {},
             readOnly = true, // to change it: clear, then search again
@@ -87,6 +88,7 @@ private fun EditingField(
 
     Column(modifier.fillMaxWidth()) {
         OutlinedTextField(
+            shape = MaterialTheme.shapes.small, // DESIGN.md: text fields use sm corners
             value = ui.text,
             onValueChange = onTextChange,
             label = { Text(stringResource(R.string.area_label)) },

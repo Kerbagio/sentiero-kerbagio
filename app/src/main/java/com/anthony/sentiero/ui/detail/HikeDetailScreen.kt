@@ -200,6 +200,7 @@ private fun PackingRow(item: PackingItem, onTick: (Boolean) -> Unit, onDelete: (
 @Composable
 private fun AddItemField(text: String, onTextChange: (String) -> Unit, onSubmit: () -> Unit) {
     OutlinedTextField(
+        shape = MaterialTheme.shapes.small, // DESIGN.md: text fields use sm corners
         value = text,
         onValueChange = onTextChange,
         placeholder = { Text(stringResource(R.string.add_item_placeholder)) },
