@@ -76,6 +76,7 @@ Rule coverage before and after this epic:
 12. **Test seams.** Reported up front under implementation rule 3.
     - Repositories become interfaces with `Room…` and `OpenMeteo…` implementations. Spec 1's fake-repository ViewModel test already needs this.
     - `unitTests.isReturnDefaultValues = true`, so `android.util.Log` in repositories doesn't break JVM tests.
+13. **Landmark map (added 28 Nov, 2.18).** The professor suggested a map of famous hiking spots with their trails. Premise 3 ("no free, reliable trail API exists") is refined, not dropped: OpenStreetMap has the trails, but the live Overpass API was too slow and unreliable on 28 Nov, so the data is captured once and bundled. At runtime, the network is used only for map tiles (OpenFreeMap, no key) and the forecast. Still no device location, no live navigation. MapLibre is outside the course slides, like Navigation Compose: learn it and be ready to explain the `AndroidView` wrapper.
 
 ## Proposed Change
 
@@ -88,7 +89,9 @@ Final architecture (one direction, as in the week 6/8 slides):
  TripRepository (interface) ── RoomTripRepository ── TripDao / ChecklistDao ── Room (sentiero.db v1)
                                    └── ReminderScheduler ── WorkManager ── ReminderWorker ── NotificationManager   (2.16)
  WeatherRepository (interface) ── OpenMeteoWeatherRepository ── GeocodingApi / ForecastApi (Retrofit, one OkHttpClient)
- Pure Kotlin, JVM-tested: Templates · SuggestionRules · ForecastCardPolicy · ReminderTime · JournalRules · DateLabels · Place
+ LandmarkRepository (interface) ── AssetLandmarkRepository ── assets/landmarks.json (OSM data, captured by tools/fetch_trails.py)   (2.18)
+ LandmarkMapScreen ── LandmarkMapVM ── MapLibreView (AndroidView) ── OpenFreeMap tiles                                             (2.18)
+ Pure Kotlin, JVM-tested: Templates · SuggestionRules · ForecastCardPolicy · ReminderTime · JournalRules · DateLabels · Place · Landmarks
 ```
 
 ### Shared contracts
@@ -96,6 +99,7 @@ Final architecture (one direction, as in the week 6/8 slides):
 **Dependencies and manifest**
 - **2.2:** `com.squareup.retrofit2:retrofit` and `com.squareup.retrofit2:converter-kotlinx-serialization` (same version, latest stable; the official converter since Retrofit 2.11). Add `<uses-permission android:name="android.permission.INTERNET" />`.
 - **2.16:** `androidx.work:work-runtime-ktx` and `<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />`.
+- **2.18:** `org.maplibre.gl:android-sdk` (no key, no new permission).
 - No other new dependencies.
 
 **Repository interfaces** (decision 12). If Spec 1 shipped `class TripRepository`, extract the interface with Android Studio's Refactor ▸ Extract ▸ Interface and rename the class `RoomTripRepository`.
@@ -273,13 +277,14 @@ fun shortDate(date: LocalDate, today: LocalDate): String =
 ```kotlin
 @Serializable object Upcoming
 @Serializable object Completed                                                       // 2.5
-@Serializable data class HikeForm(val editId: String? = null)                        // editId used from 2.14
+@Serializable object Landmarks                                                       // 2.18, tab label "Map"
+@Serializable data class HikeForm(val editId: String? = null, val landmarkId: String? = null) // editId from 2.14, landmarkId from 2.18
 @Serializable data class HikeDetail(val id: String, val fromLastHike: Boolean = false, val fellBackToBasics: Boolean = false) // flags: 2.9
 
 fun NavController.openTab(tab: Any) = navigate(tab) { popUpTo<Upcoming> { saveState = true }; launchSingleTop = true; restoreState = true }
 ```
-- **Tab bar:** Upcoming and Completed each put `SentieroBottomBar` in their own `Scaffold(bottomBar = …)`, so there are no nested Scaffolds.
-  - `NavigationBar` with icons `hiking` and `menu_book` and labels "Upcoming" and "Completed".
+- **Tab bar:** Upcoming, Map (2.18) and Completed each put `SentieroBottomBar` in their own `Scaffold(bottomBar = …)`, so there are no nested Scaffolds.
+  - `NavigationBar` with icons `hiking`, `map` and `menu_book` and labels "Upcoming", "Map" and "Completed". Until 2.18 is built, it has only the two outer tabs.
   - Selected = `currentBackStackEntry.destination.hasRoute<…>()`.
 - **Detail and form** have no tab bar. The FAB is on Upcoming only.
 
@@ -287,7 +292,8 @@ fun NavController.openTab(tab: Any) = navigate(tab) { popUpTo<Upcoming> { saveSt
 
 | Where | Text |
 |---|---|
-| Tabs | Upcoming · Completed |
+| Tabs | Upcoming · Map (2.18) · Completed |
+| Map (2.18) | Famous hiking spots · %1$s · %2$d trails (plurals) · %1$s km · [Plan a hike here] · Couldn't load the map. The list below still works. · [Retry] · Trail data © OpenStreetMap contributors. Lines can be out of date: check the route locally before you go. |
 | Due row (2.5/2.6) | [Mark as done] · on the hike date: [Mark as done] when you're back |
 | Completed empty | No completed hikes yet. When a hike is over, open it and tap Mark as done: your notes and anything you forgot land here. · [Go to Upcoming] |
 | Completed row | No notes · Forgot: %1$s · Forgot: %1$s +%2$d more |
@@ -339,6 +345,7 @@ Value formatting (pure helpers, nulls shown as "–"):
 | 2.14 | Edit hike | P3 (dropped 3rd) | 4 h | todo | 2.3 |
 | 2.15 | Completed search | P3 (dropped 2nd) | 2 h | todo | 2.5 |
 | 2.16 | Evening-before reminder | P3 (dropped 1st) | 8 h | todo | 2.6, 2.7, 2.14 |
+| 2.18 | Landmark map with trails (added 28 Nov) | P2+ (after `p2-complete`, before P3) | 12 h | todo | 2.3, 2.5 |
 | 2.17 | Final hardening, demo rehearsal, release | all | 5 h | todo | everything built |
 
 ## Dependency Graph
@@ -352,6 +359,7 @@ Spec 1 ─┬─▶ 2.1 Checklist editing ────────────�
         │                                 ├─▶ 2.11 Same-route note
         │                                 └─▶ 2.15 Completed search
         └─▶ 2.7 Delete hike ───────────────────────────────────────────────────────────┴─▶ 2.16 Reminder (needs 2.6, 2.7, 2.14 paths)
+2.3 Area search + 2.5 tabs ─▶ 2.18 Landmark map (form prefill uses the area; the Map tab joins the tab bar)
 All ─▶ 2.17 Final hardening
 ```
 
@@ -369,6 +377,7 @@ All ─▶ 2.17 Final hardening
 - **P3 is built in reverse drop order** (decision 1), so whatever is left unbuilt when time runs out is exactly what the drop order says to cut.
   - The reminder is last because it is the most expensive P3 item (~8 h) with the most platform risk (permission, WorkManager, Doze).
   - It also needs every path that changes a trip to exist first: delete (2.7), Mark as done (2.6) and date edit (2.14). ENG-R6 makes TripRepository the only place that calls the scheduler.
+- **2.18 (landmark map) comes right after `p2-complete` and before P3** (added 28 Nov). It is a suggestion from the professor and earns marks, so the P3 drop order cuts polish before it. It is not built before P2, because the loop is the app's main idea and is worth more in the demo.
 - **2.17 runs last but is not optional.** It is the demo rehearsal and the release.
 
 ---
@@ -783,6 +792,72 @@ fun noteExcerpt(notes: String): String? {                                       
 
 **Effort:** 2 h.
 
+### 2.18 Landmark map with trails (P2+ · added 28 Nov on the professor's suggestion · decision 13)
+A **Map** tab shows Lebanon's best-known hiking spots. Tapping one lists the marked trails near it; tapping a trail draws its line; **Plan a hike here** opens the new-hike form already filled in. The map is a way into the existing loop (map → hike → checklist → forecast → journal), not a separate demo.
+
+**Why the trail data is bundled, not fetched live (checked 28 Nov):** the public Overpass API (OpenStreetMap's query service) has the data, with 3-5 hiking routes within 10 km of each test spot, mostly Lebanon Mountain Trail sections with refs "LMT 5" to "LMT 10". But it took 28-46 s per request (the app's HTTP timeout is 10 s), then answered 502, and a mirror hung for more than 3 minutes. So a developer script captures the data once, as with the Tripoli fixture, and the app reads it from `assets/`. The live network parts at runtime are the map tiles (OpenFreeMap) and the forecast (Open-Meteo, unchanged).
+
+**Build**
+- **Dependency:** `org.maplibre.gl:android-sdk`, the latest stable version when you build (check Maven Central; don't take a `-pre` or variant build). No API key. Tiles and styles: `https://tiles.openfreemap.org/styles/positron` (light) and `.../styles/dark` (dark theme), both checked 28 Nov. In `SentieroApp.onCreate`: `MapLibre.getInstance(this)`.
+- **Capture script `tools/fetch_trails.py`** (Python standard library only; runs on the laptop, never in the app):
+  - Input `tools/landmarks_seed.json`: about 10 hand-picked spots with `id`, `name`, `region`, `latitude`, `longitude`, each read off the spot's OpenStreetMap page. Candidates: Jabal Moussa, Qadisha Valley, Horsh Ehden, Tannourine Cedars, Chouf Cedars (Barouk), Cedars of God (Bsharri), Baatara Gorge, Nahr Ibrahim valley, Qornet es Sawda. Keep only spots with at least one trail.
+  - For each spot, query `[out:json][timeout:60];relation["route"="hiking"](around:10000,LAT,LON);out geom;`. Retry up to 3 times, alternating `overpass-api.de` and `overpass.private.coffee`, with a 120 s timeout and a 20 s pause between requests (fair use). Send a plain User-Agent with no personal details.
+  - For each relation: name = `name:en`, else `name`; skip relations without a name. `ref` is optional. Join member ways end to end into segments; any gap starts a new segment. Simplify each segment with Douglas-Peucker at 15 m, and round coordinates to 5 decimals. Keep at most 6 trails per spot, longest first, with duplicates removed by OSM id.
+  - Write `app/src/main/assets/landmarks.json`, with `"attribution": "Trail data © OpenStreetMap contributors (ODbL)"` and the capture date. The file is committed; the script is rerun only to refresh it. Keep the file under 300 KB.
+- **Domain** (`domain/Landmarks.kt`, no Android imports):
+```kotlin
+data class LatLon(val latitude: Double, val longitude: Double)
+data class Trail(val osmId: Long, val name: String, val ref: String?, val segments: List<List<LatLon>>)
+data class Landmark(val id: String, val name: String, val region: String, val latitude: Double, val longitude: Double, val trails: List<Trail>)
+
+fun trailTitle(trail: Trail): String = listOfNotNull(trail.ref, trail.name).distinct().joinToString(" · ") // "LMT 6 · Lebanon Mountain Trail"
+fun trailLengthKm(trail: Trail): Double = trail.segments.sumOf { seg -> seg.zipWithNext { a, b -> haversineKm(a, b) }.sum() } // gaps don't count
+fun haversineKm(a: LatLon, b: LatLon): Double                                       // earth radius 6371.0088 km
+fun Landmark.toArea(): Area = Area(areaLabel(name, region, "Lebanon"), latitude, longitude)
+```
+- **Data:** `interface LandmarkRepository { suspend fun landmarks(): List<Landmark>; suspend fun landmark(id: String): Landmark? }`. `AssetLandmarkRepository(readJson: () -> String)` decodes once with `Json { ignoreUnknownKeys = true }` (DTOs in `data/local/LandmarkDtos.kt`) on `Dispatchers.IO` and keeps the list in memory. `AppContainer` passes `{ context.assets.open("landmarks.json").bufferedReader().use { it.readText() } }`. A broken bundled file is a programming bug, so it isn't caught: `LandmarkDataTest` guards it instead.
+- **Route and tab:** `@Serializable object Landmarks`; the tab label is "Map" with the `map` icon, between Upcoming and Completed. `HikeForm` gains `landmarkId: String? = null`.
+- **`LandmarkMapViewModel`:** state `landmarks`, `selectedId: String?`, `selectedTrailId: Long?`, `tiles: Loading | Ready | Failed`. `selectedId` and `selectedTrailId` live in `SavedStateHandle`, so they survive rotation. Events: `select(id)`, `selectTrail(osmId)`, `dismiss()`, `tilesLoaded()`, `tilesFailed()`, `retryTiles()`.
+- **Screen `ui/map/LandmarkMapScreen.kt`**, in its own `Scaffold(bottomBar = SentieroBottomBar)`:
+  - The top ~55% is the map: `ui/map/MapLibreView.kt` wraps `MapView` in `AndroidView` and forwards the lifecycle (start / resume / pause / stop / destroy) with a `LifecycleEventObserver`. The camera opens on Lebanon. **No location layer, no "my location" button, no location permission.**
+  - Landmarks are a `CircleLayer` from one GeoJSON source. A tap calls `queryRenderedFeatures` on that layer and then `select(id)`. The selected trail is a `LineLayer`; the selected spot's other trails are a thinner line. The camera fits the selected trail's bounds.
+  - Below the map: section head "Famous hiking spots", then one row per landmark with the name in `title` and "North Lebanon · 4 trails" in `body-small`. Rows and markers do the same thing, so every spot works with TalkBack and offline.
+  - Selecting a spot opens a `ModalBottomSheet` (as the Mark-as-done sheet) with the name, one row per trail (`trailTitle` + "12.4 km" in tabular figures), the filled primary button **Plan a hike here**, and the attribution line.
+  - When tiles fail (`addOnDidFailLoadingMapListener`), the map area shows "Couldn't load the map. The list below still works." with [Retry], which reloads the style.
+- **Prefill:** **Plan a hike here** navigates to `HikeForm(landmarkId = id)`. `HikeFormViewModel` loads the landmark and starts with route name = landmark name and the area field in Picked state with `landmark.toArea()`. Date and difficulty stay empty, and Save works as usual. A missing id opens a blank form.
+- **README:** the Map tab, MapLibre + OpenFreeMap, the bundled OSM data and how to refresh it with `tools/fetch_trails.py`, and the attribution.
+
+**Design** (DESIGN.md needs your OK first: it says "Don't add photos, maps…" and "Navigation bar: two destinations")
+- Map style Positron (light) / Dark: quiet neutrals, close to the limestone ground.
+- Markers: `primary-container` fill with a `primary` 2dp stroke, 8dp radius; selected = `primary` fill, 10dp radius. The selected trail line is 4dp `primary`; the other trails are 2dp `outline`. **No blaze anywhere**: it stays reserved for memory.
+- Sheet, rows, the error text and the button use the existing tokens. No new colors.
+
+**Accept**
+1. The Map tab shows the spots as markers on Lebanon and as rows below. Back from Map goes to Upcoming.
+2. Tapping Qadisha's marker or its row opens the sheet with its trails, each with a ref (where it has one) and a length in km. Tapping one draws its line and fits the camera.
+3. **Plan a hike here** opens the form with "Qadisha Valley" and the area "Qadisha Valley, North Lebanon" picked. Pick a date and difficulty and save: the detail shows the forecast panel for that area.
+4. In airplane mode the rows and the sheet still work, and the map shows "Couldn't load the map." After you reconnect, Retry loads it.
+5. The merged manifest has no `ACCESS_FINE_LOCATION` or `ACCESS_COARSE_LOCATION`. Check `app/build/intermediates/merged_manifest/`; if MapLibre ever adds one, remove it with `tools:node="remove"`.
+6. Rotating with a trail selected keeps the spot and the trail selected.
+7. The sheet shows "Trail data © OpenStreetMap contributors", and the map keeps MapLibre's attribution button.
+
+**Tests**
+- `LandmarkDataTest` +4 (reads the real `src/main/assets/landmarks.json`):
+  - 8-12 spots, unique ids
+  - every spot has at least one trail, and every segment has at least 2 points
+  - every point lies inside Lebanon's box (33.0-34.75 N, 35.0-36.7 E)
+  - the attribution is present
+- `TrailRulesTest` +3:
+  - 0.01° of latitude ≈ 1.112 km (±0.005)
+  - two segments sum without the gap between them
+  - the title removes duplicates and works without a ref; `toArea` label
+- `LandmarkMapViewModelTest` +2:
+  - selecting a spot then a trail, and `dismiss` clears both
+  - the state survives a new ViewModel built from the same `SavedStateHandle`
+- `HikeFormViewModelTest` +1: a landmark id prefills the route name and the picked area; an unknown id gives a blank form.
+
+**Effort:** capture script + data 2 h · domain, repository + tests 2 h · map view (AndroidView, lifecycle, layers, taps) 4 h · rows, sheet, tile states 2 h · prefill, route, tab 1.5 h · README + attribution 0.5 h = **12 h**.
+
 ### 2.12 Move back to Upcoming (P3, dropped 5th · rule 6)
 **Build:** ⋮ menu item "Move back to Upcoming", in journal mode only. It calls `reopenHike(id)` and shows "Moved back to Upcoming.". You stay on the screen, which switches to upcoming mode.
 
@@ -1049,9 +1124,10 @@ Cards:
 |---|---|---|
 | P1 cut line | 2.1 4 h · 2.2 5 h · 2.3 5 h · 2.4 6 h · 2.5 5 h · 2.6 7 h · 2.7 2 h | 34 h |
 | P2 loop | 2.8 4 h · 2.9 6 h · 2.10 4 h · 2.11 2 h | 16 h |
+| P2+ map | 2.18 12 h | 12 h |
 | P3 polish | 2.12 1 h · 2.13 2 h · 2.14 4 h · 2.15 2 h · 2.16 8 h | 17 h |
 | Release | 2.17 5 h | 5 h |
-| **Total** | | **~72 h** (P1 alone ~34 h) |
+| **Total** | | **~84 h** (P1 alone ~34 h) |
 
 Per-component splits are in each child.
 - **Fallback if time runs short:** P1 + 2.17 ≈ 39 h still completes the brief.
@@ -1061,9 +1137,12 @@ Per-component splits are in each child.
 
 | File | Change |
 |---|---|
-| `gradle/libs.versions.toml`, `app/build.gradle.kts` | Retrofit + kotlinx converter (2.2), WorkManager (2.16), `unitTests.isReturnDefaultValues` (2.2) |
+| `gradle/libs.versions.toml`, `app/build.gradle.kts` | Retrofit + kotlinx converter (2.2), WorkManager (2.16), MapLibre (2.18), `unitTests.isReturnDefaultValues` (2.2) |
 | `app/src/main/AndroidManifest.xml` | INTERNET (2.2), POST_NOTIFICATIONS (2.16) |
-| `.../SentieroApp.kt` | notification channel (2.16) |
+| `.../SentieroApp.kt` | notification channel (2.16), `MapLibre.getInstance` (2.18) |
+| `tools/fetch_trails.py`, `tools/landmarks_seed.json`, `app/src/main/assets/landmarks.json` | trail capture script and bundled OSM data (2.18) |
+| `.../domain/Landmarks.kt`, `.../data/LandmarkRepository.kt`, `AssetLandmarkRepository.kt`, `.../data/local/LandmarkDtos.kt` | 2.18 |
+| `.../ui/map/LandmarkMapScreen.kt`, `LandmarkMapViewModel.kt`, `MapLibreView.kt` | 2.18 |
 | `.../AppContainer.kt` | OkHttpClient, Json, 2 Retrofits, `weatherRepository` (2.2); clock into the repository (2.6); scheduler (2.16) |
 | `.../data/TripRepository.kt` | interface (decision 12); `RoomTripRepository.kt` with every write path (2.1-2.16) |
 | `.../data/WeatherRepository.kt`, `OpenMeteoWeatherRepository.kt` | interface + mapping + failure classes (2.2) |
@@ -1072,14 +1151,14 @@ Per-component splits are in each child.
 | `.../domain/Models.kt` | `Area`, extended `Hike` and `PackingItem`, `CompletedSummary`, `ListSource`, `CreateResult`, journal types |
 | `.../domain/Place.kt`, `ForecastCardPolicy.kt`, `SuggestionRules.kt`, `JournalRules.kt`, `DateLabels.kt`, `ReminderTime.kt` | pure rules |
 | `.../reminder/ReminderScheduler.kt`, `ReminderWorker.kt`, `Notifications.kt` | 2.16 |
-| `.../ui/nav/Routes.kt`, `SentieroNavHost.kt`, `SentieroBottomBar.kt` | `Completed`, route flags, tabs (2.5, 2.9) |
+| `.../ui/nav/Routes.kt`, `SentieroNavHost.kt`, `SentieroBottomBar.kt` | `Completed`, route flags, tabs (2.5, 2.9), `Landmarks` + `landmarkId` (2.18) |
 | `.../ui/components/AreaSearchState.kt`, `AreaSearchField.kt`, `MemoryTag.kt` | 2.3, 2.9 |
 | `.../ui/upcoming/UpcomingScreen.kt`, `UpcomingViewModel.kt` | due rows, sheet host, Undo (2.5, 2.6) |
 | `.../ui/completed/CompletedScreen.kt`, `CompletedViewModel.kt` | 2.5, 2.15 |
 | `.../ui/form/HikeFormScreen.kt`, `HikeFormViewModel.kt` | area (2.3), list chips (2.9), edit mode (2.14) |
 | `.../ui/detail/HikeDetailScreen.kt`, `HikeDetailViewModel.kt` | add/delete (2.1), forecast (2.4), journal mode (2.5), host (2.6), menu (2.7), chips (2.8), tag + arrival (2.9), note (2.11), reminder row (2.16) |
 | `.../ui/detail/ForecastPanel.kt`, `ForecastFormat.kt`, `MarkDoneSheet.kt`, `MarkDoneViewModel.kt`, `ReminderRow.kt` | 2.4, 2.6, 2.10, 2.16 |
-| `app/src/main/res/values/strings.xml` (+ `plurals`), `res/drawable/` (`hiking`, `menu_book`, `add`, `close`, `more_vert`, `search`, `notifications`) | copy table; DR-5A icons |
+| `app/src/main/res/values/strings.xml` (+ `plurals`), `res/drawable/` (`hiking`, `menu_book`, `add`, `close`, `more_vert`, `search`, `notifications`, `map` from 2.18) | copy table; DR-5A icons |
 | `app/src/test/.../*Test.kt`, `fakes/`, `resources/*.json` | JVM tests and fixtures |
 | `app/src/androidTest/.../RoomTripRepositoryTest.kt`, `TripDaoTest.kt` | instrumented tests |
 | `README.md` | 2.17 |
@@ -1093,7 +1172,7 @@ Per-component splits are in each child.
   - a tablet layout, Arabic UI translation and RTL mirroring (DR-6A, DR-6C)
   - a "Start from basics" button on an empty list (DR-2B)
   - keeping unsaved sheet drafts (DR-2E)
-- **Brief and premise limits:** an offline weather cache (approach B), trail-data APIs, device location, live navigation, emergency guidance, safety guarantees.
+- **Brief and premise limits:** an offline weather cache (approach B), live trail-data API calls from the app (2.18 bundles captured OSM data instead), device location or a "my location" dot, offline map tiles, elevation profiles, turn-by-turn or live navigation, emergency guidance, safety guarantees.
 - **Not chosen in this spec:**
   - `ACCESS_NETWORK_STATE` or ConnectivityManager checks (answer 2)
   - rebuilding the list when difficulty is edited (answer 3)

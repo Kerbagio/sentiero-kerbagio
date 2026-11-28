@@ -37,6 +37,7 @@ Demo sentence: "I forgot my headlamp at Chouf. When I planned Jabal Moussa, the 
 1. The brief is the contract. MVP = create trip (date, route name, difficulty, packing checklist); Upcoming and Completed on separate screens; trips and checklist progress persisted in Room; one API with visible Loading / Empty / Error / Retry states.
 2. The grade is won in the explanation, not the feature count. Course stack only; every line must be defensible in its layer.
 3. The one API is weather (Open-Meteo), not trail data. No free, reliable trail API exists. The user types an area name, picks the right match, and geocoding gives its coordinates. No location permission.
+   - *Refined 28 Nov (professor's suggestion):* a landmark map shows OpenStreetMap trails that were captured once and bundled, because the live Overpass API was too slow and unreliable to call from the app. There is still no location permission. See Spec 2, 2.18 and decision 13.
 4. "Trail Journal" = notes written when the user marks a trip completed. Completion is an explicit user action, never automatic when the date passes. Photos are a stretch goal (Photo Picker, no permission needed).
 5. The midterm is one vertical slice that survives an app restart: create trip → tick packing items → saved detail screen. No API and no Completed screen before the midterm.
 

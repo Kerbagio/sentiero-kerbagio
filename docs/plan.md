@@ -130,7 +130,7 @@ Logged in TODOS.md. Not built in this project.
 ## NOT in scope
 - Photos on completed hikes: deferred by CEO-4 (TODOS.md).
 - Live navigation, location tracking, emergency guidance, safety guarantees: brief scope boundary.
-- Trail-data APIs: premise 3.
+- Trail-data APIs: premise 3. *Changed 28 Nov:* the professor suggested a landmark map with trails, so Spec 2 child 2.18 adds it with OpenStreetMap trail data captured once and bundled (no live trail API calls, no device location). See Spec 2 decision 13.
 
 ## Current scope (before Section 1)
 Mode: HOLD SCOPE (explicit user instruction). Accepted: CEO-1 tiers and cut line, CEO-2 templates, CEO-3 reminder as last P3 slice. Deferred: CEO-4 photos (TODOS.md). Rejected: none. Pending: CEO-5, CEO-6, CEO-7 below.
@@ -413,7 +413,7 @@ REALITY: pr-count pass solo, commits to main, no PR queue docs/plan.md:1
 - Photos on completed hikes: deferred (D4, "Defer to TODOS.md (recommended)"); not in the brief's MVP; storage trap. In TODOS.md.
 - Exact-time reminders: rejected (D5 chose "around 18:00"); needs a second special permission.
 - Route-name suggestions for the same-route note: rejected (D7 chose exact names only).
-- Live navigation, location tracking, emergency guidance, safety guarantees, trail-data APIs: brief scope boundary and premise 3.
+- Live navigation, location tracking, emergency guidance, safety guarantees, trail-data APIs: brief scope boundary and premise 3. *Changed 28 Nov:* bundled OSM trail lines on a landmark map are in scope (Spec 2, 2.18); live trail-data API calls and device location stay out.
 
 ## What already exists
 - Week 6 "My Tasks" (Room entity, DAO, repository, ViewModel `stateIn`): reused as the shape of trips and checklist items.
