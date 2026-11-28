@@ -35,6 +35,10 @@ android {
     buildFeatures {
         compose = true
     }
+    // JVM tests call android.util.Log through the weather repository; this makes Log a no-op there.
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 // Room writes the schema JSON here so it can be committed (app/schemas/).
@@ -59,6 +63,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
