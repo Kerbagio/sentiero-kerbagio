@@ -12,8 +12,9 @@ The demonstrated feature: **create a hike, complete its packing items, and see t
 - **New hike:** route name, a date from the Material 3 calendar, and a difficulty (Easy / Moderate / Hard). Save stays disabled until all three are set.
 - **Packing checklist:** each hike starts with 10, 12 or 14 items depending on its difficulty. Every tick is saved immediately, and "Packing · 3 of 12" shows the progress.
 - **Upcoming:** hikes sorted by date, each with its packing progress. Tap one to open it.
-- **Saved on the phone:** hikes and ticks are stored in a Room (SQLite) database, so they survive closing or force-stopping the app. No internet is needed.
+- **Saved on the phone:** hikes and ticks are stored in a Room (SQLite) database, so they survive closing or force-stopping the app. Only the area search needs internet.
 - Since the midterm: you can add your own items, and delete items with Undo.
+- **Area (optional)** on the New hike form: type a village or town, tap Search, and pick the right match from Open-Meteo's place search (for example "Bsharri, North Lebanon"). The hike saves the area for its forecast. Without a pick, the hike still saves, just without an area. Offline, the field shows "Couldn't search right now." with Retry.
 
 **Out of scope:** live navigation, location tracking, emergency guidance and safety guarantees.
 
@@ -38,8 +39,8 @@ From the command line instead:
 ## Tests
 
 ```
-./gradlew test                  # JVM unit tests: TemplatesTest, HikeDetailViewModelTest, PlaceTest,
-                                #   JsonFixturesTest, WeatherRepositoryTest (offline: saved JSON + fake APIs)
+./gradlew test                  # JVM unit tests: TemplatesTest, HikeDetailViewModelTest, HikeFormViewModelTest, PlaceTest,
+                                #   AreaSearchStateTest, JsonFixturesTest, WeatherRepositoryTest (all offline: saved JSON + fakes)
 ./gradlew connectedAndroidTest  # on a device: TripDaoTest, RoomTripRepositoryTest
 ```
 
