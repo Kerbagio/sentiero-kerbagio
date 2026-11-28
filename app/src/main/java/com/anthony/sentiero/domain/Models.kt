@@ -19,6 +19,9 @@ data class Hike(
     val difficulty: Difficulty,
 )
 
+/** Where the forecast is fetched for: a picked place's label and coordinates (Spec 2). */
+data class Area(val label: String, val latitude: Double, val longitude: Double)
+
 /** One row on the Upcoming list: the hike plus how much of its list is packed. */
 data class HikeSummary(val hike: Hike, val packedCount: Int, val totalCount: Int)
 

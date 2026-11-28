@@ -5,6 +5,10 @@ package com.anthony.sentiero.data.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+/** The one Json the app decodes weather with (tests use it too). Unknown keys are skipped. */
+val OpenMeteoJson = Json { ignoreUnknownKeys = true }
 
 /** No "results" key at all when nothing matches (checked on the live API). */
 @Serializable
