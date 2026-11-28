@@ -256,8 +256,8 @@ Squared-off, like signage. Compose `Shapes`: extraSmall = `xs` (tags, checkboxes
 - **Snackbar:** `inverse-surface` with the Undo action in `inverse-primary`.
 - **Navigation bar:** three destinations (Upcoming, Map, Completed), `surface-container`, `secondary-container` indicator. Two until the map (2.18) is built.
 - **Landmark map (2.18):** the map is a tool, not decoration.
-  - Map style: OpenFreeMap Positron in light, Dark in dark, so the map stays quiet neutral like the limestone ground.
-  - Markers: `primary-container` fill with a 2dp `primary` stroke, 8dp radius; the selected marker is `primary` fill at 10dp.
+  - Map style: OpenFreeMap Liberty (full color, like a real map) in both themes, with 2D hill shading from AWS Terrain Tiles so valleys and ridges read at a glance. The map is the one place in the app where color isn't held back: it describes the land, so it is information, not decoration.
+  - Markers: `primary-container` fill with a 2dp white stroke so they stand out on green forest, 8dp radius; the selected marker is `primary` fill at 10dp.
   - Trails: the selected trail is a 4dp `primary` line; the spot's other trails are 2dp `outline`.
   - The map takes the top ~55% of the screen. Below it, the spots are full-width rows with hairlines (name in `title`, region and trail count in `body-small`), so every spot also works offline and with TalkBack.
   - Tapping a spot opens a bottom sheet styled like the Mark-as-done sheet: trail rows with lengths in tabular figures, one filled primary **Plan a hike here** button, and the attribution in `body-small` `on-surface-variant`.
@@ -290,4 +290,5 @@ Squared-off, like signage. Compose `Shapes`: extraSmall = `xs` (tags, checkboxes
 | 2026-11-01 | Blaze color reserved for memory | Serves "It remembers what I forgot"; the loop is visible at a glance |
 | 2026-11-01 | Barlow Condensed + Source Sans 3, bundled | Signage-like titles fit long route names; offline rendering; both OFL |
 | 2026-11-01 | Rows instead of cards; dynamic color off | Calmer, denser lists; color meaning survives on every phone |
-| 2026-11-28 | Landmark map allowed (2.18), third tab "Map" | The professor suggested it; it is the way into planning a hike, so it serves the product. It uses neutral map styles and cedar markers, with no blaze |
+| 2026-11-28 | Landmark map allowed (2.18), third tab "Map" | The professor suggested it; it is the way into planning a hike, so it serves the product. Cedar markers, no blaze |
+| 2026-11-28 | Map in full color (Liberty) with hill shading | You asked for a real-looking map with terrain; both are free with no key. White marker strokes keep the markers visible |

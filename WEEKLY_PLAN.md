@@ -12,7 +12,7 @@ The real dates: **the midterm presentation is Tue 24 Nov** (the slice is built, 
 
 ## Added Sat 28 Nov: the landmark map (2.18)
 The professor suggested a map of famous hiking spots with their trails. You chose to **add it without dropping anything**.
-- **2.18 Landmark map with trails, 12 h**, specified in Spec 2. It goes **right after `p2-complete` (week 6) and before P3**, so if time runs short the P3 drop order cuts polish first and the map stays.
+- **2.18 Landmark map with trails, 12.5 h** (full-color map with free hill shading), specified in Spec 2. It goes **right after `p2-complete` (week 6) and before P3**, so if time runs short the P3 drop order cuts polish first and the map stays.
 - To make room in week 6, 2.12-2.14 move to week 7.
 - **The total is now ~83 h. Weeks 6 and 7 are ~24-25 h each**, above the 18 h/week you planned. If week 6 ends more than 3 h behind, re-plan (see the bottom of this file). The drop order is unchanged: the reminder (2.16) first.
 - Trail data is captured once with a script and bundled, because the live Overpass API took 28-46 s per request and then failed on 28 Nov.
@@ -148,7 +148,7 @@ No planned work was done this week. 2.1 had already been built on 14 Nov; 2.2-2.
 - [ ] 2.11 Same-route note; tag `p2-complete` (2 h)
 - [ ] 2.18 Capture script `tools/fetch_trails.py` + `landmarks_seed.json` → `assets/landmarks.json` (2 h)
 - [ ] 2.18 `Landmarks.kt` rules, `AssetLandmarkRepository` + LandmarkDataTest ×4, TrailRulesTest ×3 (2 h)
-- [ ] 2.18 MapLibre dependency, `MapLibreView` (AndroidView + lifecycle), marker and trail layers, marker taps (4 h)
+- [ ] 2.18 MapLibre dependency, `MapLibreView` (AndroidView + lifecycle), marker and trail layers, marker taps, hill shading (4.5 h)
 - [ ] 2.18 Landmark rows, the trail sheet, the tile error state + LandmarkMapViewModelTest ×2 (2 h)
 - [ ] 2.18 Map tab, `HikeForm(landmarkId)` prefill + HikeFormViewModelTest ×1 (1.5 h)
 - [ ] 2.18 README (Map tab, MapLibre + OpenFreeMap, OSM data and how to refresh it) + attribution check (0.5 h)

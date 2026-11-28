@@ -345,7 +345,7 @@ Value formatting (pure helpers, nulls shown as "–"):
 | 2.14 | Edit hike | P3 (dropped 3rd) | 4 h | todo | 2.3 |
 | 2.15 | Completed search | P3 (dropped 2nd) | 2 h | todo | 2.5 |
 | 2.16 | Evening-before reminder | P3 (dropped 1st) | 8 h | todo | 2.6, 2.7, 2.14 |
-| 2.18 | Landmark map with trails (added 28 Nov) | P2+ (after `p2-complete`, before P3) | 12 h | todo | 2.3, 2.5 |
+| 2.18 | Landmark map with trails (added 28 Nov) | P2+ (after `p2-complete`, before P3) | 12.5 h | todo | 2.3, 2.5 |
 | 2.17 | Final hardening, demo rehearsal, release | all | 5 h | todo | everything built |
 
 ## Dependency Graph
@@ -798,7 +798,8 @@ A **Map** tab shows Lebanon's best-known hiking spots. Tapping one lists the mar
 **Why the trail data is bundled, not fetched live (checked 28 Nov):** the public Overpass API (OpenStreetMap's query service) has the data, with 3-5 hiking routes within 10 km of each test spot, mostly Lebanon Mountain Trail sections with refs "LMT 5" to "LMT 10". But it took 28-46 s per request (the app's HTTP timeout is 10 s), then answered 502, and a mirror hung for more than 3 minutes. So a developer script captures the data once, as with the Tripoli fixture, and the app reads it from `assets/`. The live network parts at runtime are the map tiles (OpenFreeMap) and the forecast (Open-Meteo, unchanged).
 
 **Build**
-- **Dependency:** `org.maplibre.gl:android-sdk`, the latest stable version when you build (check Maven Central; don't take a `-pre` or variant build). No API key. Tiles and styles: `https://tiles.openfreemap.org/styles/positron` (light) and `.../styles/dark` (dark theme), both checked 28 Nov. In `SentieroApp.onCreate`: `MapLibre.getInstance(this)`.
+- **Dependency:** `org.maplibre.gl:android-sdk`, the latest stable version when you build (check Maven Central; don't take a `-pre` or variant build). No API key. Style: `https://tiles.openfreemap.org/styles/liberty` (full color, in light and dark theme), checked 28 Nov. In `SentieroApp.onCreate`: `MapLibre.getInstance(this)`.
+- **Terrain (hill shading), free, no key:** AWS Terrain Tiles (Mapzen "terrarium" elevation, AWS Open Data), `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png`, checked 28 Nov. After the style loads, add a `RasterDemSource("terrain", TileSet(...), tileSize 256)` with terrarium encoding and max zoom 15, and a `HillshadeLayer` below the first road layer (`hillshadeExaggeration` 0.4, neutral shadow and highlight colors). This is 2D shading only: no 3D tilt, no elevation profile.
 - **Capture script `tools/fetch_trails.py`** (Python standard library only; runs on the laptop, never in the app):
   - Input `tools/landmarks_seed.json`: about 10 hand-picked spots with `id`, `name`, `region`, `latitude`, `longitude`, each read off the spot's OpenStreetMap page. Candidates: Jabal Moussa, Qadisha Valley, Horsh Ehden, Tannourine Cedars, Chouf Cedars (Barouk), Cedars of God (Bsharri), Baatara Gorge, Nahr Ibrahim valley, Qornet es Sawda. Keep only spots with at least one trail.
   - For each spot, query `[out:json][timeout:60];relation["route"="hiking"](around:10000,LAT,LON);out geom;`. Retry up to 3 times, alternating `overpass-api.de` and `overpass.private.coffee`, with a 120 s timeout and a 20 s pause between requests (fair use). Send a plain User-Agent with no personal details.
@@ -828,8 +829,8 @@ fun Landmark.toArea(): Area = Area(areaLabel(name, region, "Lebanon"), latitude,
 - **README:** the Map tab, MapLibre + OpenFreeMap, the bundled OSM data and how to refresh it with `tools/fetch_trails.py`, and the attribution.
 
 **Design** (approved 28 Nov; DESIGN.md has the Landmark map rules)
-- Map style Positron (light) / Dark: quiet neutrals, close to the limestone ground.
-- Markers: `primary-container` fill with a `primary` 2dp stroke, 8dp radius; selected = `primary` fill, 10dp radius. The selected trail line is 4dp `primary`; the other trails are 2dp `outline`. **No blaze anywhere**: it stays reserved for memory.
+- Map style Liberty, full color like a real map, with the hill shading on top (changed 28 Nov from Positron, at your request).
+- Markers: `primary-container` fill with a 2dp white stroke (so they stand out on green forest), 8dp radius; selected = `primary` fill, 10dp radius. The selected trail line is 4dp `primary`; the other trails are 2dp `outline`. **No blaze anywhere**: it stays reserved for memory.
 - Sheet, rows, the error text and the button use the existing tokens. No new colors.
 
 **Accept**
@@ -839,7 +840,8 @@ fun Landmark.toArea(): Area = Area(areaLabel(name, region, "Lebanon"), latitude,
 4. In airplane mode the rows and the sheet still work, and the map shows "Couldn't load the map." After you reconnect, Retry loads it.
 5. The merged manifest has no `ACCESS_FINE_LOCATION` or `ACCESS_COARSE_LOCATION`. Check `app/build/intermediates/merged_manifest/`; if MapLibre ever adds one, remove it with `tools:node="remove"`.
 6. Rotating with a trail selected keeps the spot and the trail selected.
-7. The sheet shows "Trail data © OpenStreetMap contributors", and the map keeps MapLibre's attribution button.
+7. The sheet shows "Trail data © OpenStreetMap contributors", and the map keeps MapLibre's attribution button, which also credits the terrain ("Terrain: Mapzen, AWS Open Data").
+8. Around Qadisha and Qornet es Sawda the hill shading shows the valley and the ridges. With the terrain tiles blocked, the map still draws without them.
 
 **Tests**
 - `LandmarkDataTest` +4 (reads the real `src/main/assets/landmarks.json`):
@@ -856,7 +858,7 @@ fun Landmark.toArea(): Area = Area(areaLabel(name, region, "Lebanon"), latitude,
   - the state survives a new ViewModel built from the same `SavedStateHandle`
 - `HikeFormViewModelTest` +1: a landmark id prefills the route name and the picked area; an unknown id gives a blank form.
 
-**Effort:** capture script + data 2 h · domain, repository + tests 2 h · map view (AndroidView, lifecycle, layers, taps) 4 h · rows, sheet, tile states 2 h · prefill, route, tab 1.5 h · README + attribution 0.5 h = **12 h**.
+**Effort:** capture script + data 2 h · domain, repository + tests 2 h · map view (AndroidView, lifecycle, layers, taps) 4 h · hill shading 0.5 h · rows, sheet, tile states 2 h · prefill, route, tab 1.5 h · README + attribution 0.5 h = **12.5 h**.
 
 ### 2.12 Move back to Upcoming (P3, dropped 5th · rule 6)
 **Build:** ⋮ menu item "Move back to Upcoming", in journal mode only. It calls `reopenHike(id)` and shows "Moved back to Upcoming.". You stay on the screen, which switches to upcoming mode.
@@ -1124,10 +1126,10 @@ Cards:
 |---|---|---|
 | P1 cut line | 2.1 4 h · 2.2 5 h · 2.3 5 h · 2.4 6 h · 2.5 5 h · 2.6 7 h · 2.7 2 h | 34 h |
 | P2 loop | 2.8 4 h · 2.9 6 h · 2.10 4 h · 2.11 2 h | 16 h |
-| P2+ map | 2.18 12 h | 12 h |
+| P2+ map | 2.18 12.5 h | 12.5 h |
 | P3 polish | 2.12 1 h · 2.13 2 h · 2.14 4 h · 2.15 2 h · 2.16 8 h | 17 h |
 | Release | 2.17 5 h | 5 h |
-| **Total** | | **~84 h** (P1 alone ~34 h) |
+| **Total** | | **~84.5 h** (P1 alone ~34 h) |
 
 Per-component splits are in each child.
 - **Fallback if time runs short:** P1 + 2.17 ≈ 39 h still completes the brief.
