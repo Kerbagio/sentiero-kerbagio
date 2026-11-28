@@ -93,12 +93,12 @@ No planned work was done this week. 2.1 had already been built on 14 Nov; 2.2-2.
 ## Week 4 — Mon 23 – Sun 29 Nov · Midterm presentation, then all the weather (P1)
 **Planned: ~16.5 h**
 - [x] Deck cut to 6 slides for the brief, README written, repo pushed and made public (Mon 23 Nov)
-- [ ] **Tue 24 Nov: present the midterm** (deck: `presentation/Sentiero-Midterm.pptx`, notes: `docs/MIDTERM_CHEATSHEET.md`)
+- [x] **Tue 24 Nov: present the midterm** (deck: `presentation/Sentiero-Midterm.pptx`, notes: `docs/MIDTERM_CHEATSHEET.md`)
 - [x] 2.1 Accept check on the phone: add an item, delete it, Undo, zero-items text; then tick it here (0.5 h) *(passed Mon 23 Nov; tests 9/9 green)*
-- [ ] 2.2 Retrofit + kotlinx converter, INTERNET permission, AppContainer wiring (1 h)
-- [ ] 2.2 `GeocodingApi`, `ForecastApi`, DTOs with nullable fields (1 h)
-- [ ] 2.2 `OpenMeteoWeatherRepository`: mapping, rounding, failure classes, `Sentiero/Weather` log (1.5 h)
-- [ ] 2.2 Fixtures (capture Tripoli with curl) + JsonFixturesTest, WeatherRepositoryTest, PlaceTest (1.5 h)
+- [x] 2.2 Retrofit + kotlinx converter, INTERNET permission, AppContainer wiring (1 h)
+- [x] 2.2 `GeocodingApi`, `ForecastApi`, DTOs with nullable fields (1 h)
+- [x] 2.2 `OpenMeteoWeatherRepository`: mapping, rounding, failure classes, `Sentiero/Weather` log (1.5 h)
+- [x] 2.2 Fixtures (capture Tripoli with curl) + JsonFixturesTest, WeatherRepositoryTest, PlaceTest (1.5 h) *(done Sat 28 Nov: 17/17 JVM tests green, no catch-alls; Accept 3, the airplane-mode log line, is checked on the phone with 2.4)*
 - [ ] 2.3 `AreaSearchState`: search on submit, 2-letter minimum, cancel the previous job (1.5 h)
 - [ ] 2.3 `AreaSearchField`: Editing / Picked, results, Empty / Error + Retry (1.5 h)
 - [ ] 2.3 Form: "Area (optional)", the "No place selected" hint, area saved on create (1 h)
