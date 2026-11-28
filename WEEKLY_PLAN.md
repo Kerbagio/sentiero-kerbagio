@@ -10,6 +10,13 @@ The real dates: **the midterm presentation is Tue 24 Nov** (the slice is built, 
 - **The build order stays P1 → P2 → P3** (`p1-complete` in week 5, `p2-complete` in week 6). If time runs out, only the end of P3 is at risk, dropped in the plan's order: the reminder (2.16) first.
 - **Hard stop:** nothing new after Thu 17 Dec. Fri 18 – Sun 20 Dec is for the README, the release and the rehearsal.
 
+## Added Sat 28 Nov: the landmark map (2.18)
+The professor suggested a map of famous hiking spots with their trails. You chose to **add it without dropping anything**.
+- **2.18 Landmark map with trails, 12 h**, specified in Spec 2. It goes **right after `p2-complete` (week 6) and before P3**, so if time runs short the P3 drop order cuts polish first and the map stays.
+- To make room in week 6, 2.12-2.14 move to week 7.
+- **The total is now ~83 h. Weeks 6 and 7 are ~24-25 h each**, above the 18 h/week you planned. If week 6 ends more than 3 h behind, re-plan (see the bottom of this file). The drop order is unchanged: the reminder (2.16) first.
+- Trail data is captured once with a script and bundled, because the live Overpass API took 28-46 s per request and then failed on 28 Nov.
+
 ## Original assumptions (1 Nov, kept for history)
 - **10 hours a week.** You didn't say how many hours you have, so this is the default. The budget check below shows what it buys.
 - **5 weeks, Mon 2 Nov – Sun 6 Dec,** instead of the default 4, because the design doc assumes the final around Sun 6 Dec. When the real date is announced, I re-plan.
@@ -33,7 +40,7 @@ Each week below schedules the cut line as its main list. **Next if you have time
 
 ## Build queue (one order for every pace)
 
-Spec 1 (bare) → midterm catch-up → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 → **tag `p1-complete`** → 2.8 → 2.9 → 2.10 → 2.11 → **tag `p2-complete`** → 2.12 → 2.13 → 2.14 → 2.15 → 2.16 → 2.17 (always in the last week)
+Spec 1 (bare) → midterm catch-up → 2.1 → 2.2 → 2.3 → 2.4 → 2.5 → 2.6 → 2.7 → **tag `p1-complete`** → 2.8 → 2.9 → 2.10 → 2.11 → **tag `p2-complete`** → **2.18 map** → 2.12 → 2.13 → 2.14 → 2.15 → 2.16 → 2.17 (always in the last week)
 
 Anything not built by the deadline is dropped from the end of P3: the reminder (2.16) first, then Completed search, Edit hike, Edit journal, Move back.
 
@@ -134,23 +141,29 @@ No planned work was done this week. 2.1 had already been built on 14 Nov; 2.2-2.
 
 **Fallback:** ship the detail host first; the Upcoming row button reuses the same sheet. If the week runs over, 2.8 moves to Monday of week 6.
 
-## Week 6 — Mon 7 – Sun 13 Dec · The loop (P2) → `p2-complete`, then the first polish (P3)
-**Planned: ~19 h**
+## Week 6 — Mon 7 – Sun 13 Dec · The loop (P2) → `p2-complete`, then the landmark map
+**Planned: ~24 h** (was ~19 h; 2.18 added on 28 Nov, 2.12-2.14 moved to week 7)
 - [ ] 2.9 Start from last hike + memory tag + arrival (6 h)
 - [ ] 2.10 Add something you forgot (4 h)
 - [ ] 2.11 Same-route note; tag `p2-complete` (2 h)
+- [ ] 2.18 Capture script `tools/fetch_trails.py` + `landmarks_seed.json` → `assets/landmarks.json` (2 h)
+- [ ] 2.18 `Landmarks.kt` rules, `AssetLandmarkRepository` + LandmarkDataTest ×4, TrailRulesTest ×3 (2 h)
+- [ ] 2.18 MapLibre dependency, `MapLibreView` (AndroidView + lifecycle), marker and trail layers, marker taps (4 h)
+- [ ] 2.18 Landmark rows, the trail sheet, the tile error state + LandmarkMapViewModelTest ×2 (2 h)
+- [ ] 2.18 Map tab, `HikeForm(landmarkId)` prefill + HikeFormViewModelTest ×1 (1.5 h)
+- [ ] 2.18 README (Map tab, MapLibre + OpenFreeMap, OSM data and how to refresh it) + attribution check (0.5 h)
+
+**Done when:** the demo sentence works: forgetting the headlamp at Chouf puts it first on the next hike's list. `p2-complete` is tagged. On the Map tab, tapping Qadisha lists its trails, a trail draws its line, and **Plan a hike here** opens a filled-in form whose hike shows the Qadisha forecast.
+
+**Top risk:** 2.9 touches the form, the template chips and the motion from DESIGN.md at once. MapLibre inside Compose (AndroidView, lifecycle, layers) is new and outside the slides.
+
+**Fallback:** P2 comes first. Capture the trail data early in the week: if Overpass is down for a whole day, try the mirror the next day. The rows and the sheet work without the map view, so if the map view fights you, demo the rows + sheet + Plan a hike here first and finish the map view on Monday of week 7.
+
+## Week 7 — Mon 14 – Sun 20 Dec · Polish, release, rehearse (final ~Sun 20 Dec)
+**Planned: ~25 h** (was ~18 h; 2.12-2.14 moved here from week 6)
 - [ ] 2.12 Move back to Upcoming (P3) (1 h)
 - [ ] 2.13 Edit journal (P3) (2 h)
 - [ ] 2.14 Edit hike (P3) (4 h)
-
-**Done when:** the demo sentence works: forgetting the headlamp at Chouf puts it first on the next hike's list. `p2-complete` is tagged. A completed hike can be moved back, its journal edited, and any hike edited.
-
-**Top risk:** 2.9 touches the form, the template chips and the motion from DESIGN.md at once.
-
-**Fallback:** P2 comes first. If the week runs over, P3 items move to week 7 in the plan's order; the reminder (2.16) is then the first thing dropped.
-
-## Week 7 — Mon 14 – Sun 20 Dec · Last polish, release, rehearse (final ~Sun 20 Dec)
-**Planned: ~18 h**
 - [ ] 2.15 Completed search (P3) (2 h)
 - [ ] 2.16 Evening-before reminder: WorkManager, notification channel, POST_NOTIFICATIONS asked only when turned on (P3) (8 h)
 - [ ] 2.17 Accessibility: 10-minute TalkBack pass, 200% font, 48dp targets (1 h)
@@ -162,7 +175,7 @@ No planned work was done this week. 2.1 had already been built on 14 Nov; 2.2-2.
 - [ ] *(optional)* Draw the architecture and one data flow for the defense (0.5 h)
 - [ ] *(optional)* Write a short report, only if the course asks for one (1 h)
 
-**Done when:** every child 2.1-2.17 is ticked, the README covers the whole app, `final-demo` is tagged with its APK, and the demo has been rehearsed twice.
+**Done when:** every child 2.1-2.18 is ticked, the README covers the whole app, `final-demo` is tagged with its APK, and the demo has been rehearsed twice.
 
 **Top risk:** the reminder is the most expensive item with the most platform risk (permission, WorkManager, Doze), and it lands in the last week.
 
