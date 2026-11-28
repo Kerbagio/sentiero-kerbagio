@@ -17,6 +17,7 @@ data class Hike(
     val routeName: String,
     val date: LocalDate,
     val difficulty: Difficulty,
+    val area: Area? = null, // null = no place picked, so no forecast
 )
 
 /** Where the forecast is fetched for: a picked place's label and coordinates (Spec 2). */

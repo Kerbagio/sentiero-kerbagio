@@ -5,6 +5,7 @@
 package com.anthony.sentiero.ui.detail
 
 import com.anthony.sentiero.data.TripRepository
+import com.anthony.sentiero.domain.Area
 import com.anthony.sentiero.domain.Difficulty
 import com.anthony.sentiero.domain.Hike
 import com.anthony.sentiero.domain.HikeSummary
@@ -34,7 +35,7 @@ private class FakeTripRepository : TripRepository {
     override fun observeHike(id: String): Flow<Hike?> =
         flowOf(Hike(id, "Jabal Moussa Reserve", LocalDate.of(2026, 11, 21), Difficulty.MODERATE))
     override fun observeItems(tripId: String): Flow<List<PackingItem>> = items
-    override suspend fun createHike(routeName: String, date: LocalDate, difficulty: Difficulty) = "hike"
+    override suspend fun createHike(routeName: String, date: LocalDate, difficulty: Difficulty, area: Area?) = "hike"
 
     override suspend fun setPacked(itemId: String, packed: Boolean) {
         setPackedCalls += itemId to packed

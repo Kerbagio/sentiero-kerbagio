@@ -11,6 +11,7 @@ import com.anthony.sentiero.data.local.ChecklistItemEntity
 import com.anthony.sentiero.data.local.SentieroDatabase
 import com.anthony.sentiero.data.local.TripDao
 import com.anthony.sentiero.data.local.TripEntity
+import com.anthony.sentiero.domain.Area
 import com.anthony.sentiero.domain.Difficulty
 import com.anthony.sentiero.domain.Hike
 import com.anthony.sentiero.domain.HikeSummary
@@ -40,8 +41,12 @@ class RoomTripRepository(
         }
 
     /** Saves the hike and its starting packing list together. Returns the new hike's id. */
-    override suspend fun createHike(routeName: String, date: LocalDate, difficulty: Difficulty): String {
-        val trip = TripEntity(routeName = routeName.trim(), date = date, difficulty = difficulty)
+    override suspend fun createHike(routeName: String, date: LocalDate, difficulty: Difficulty, area: Area?): String {
+        // The three area columns are always written together: all set, or all null.
+        val trip = TripEntity(
+            routeName = routeName.trim(), date = date, difficulty = difficulty,
+            areaLabel = area?.label, latitude = area?.latitude, longitude = area?.longitude,
+        )
         val items = templateFor(difficulty).mapIndexed { index, label ->
             ChecklistItemEntity(tripId = trip.id, label = label, position = index)
         }
@@ -100,7 +105,11 @@ class RoomTripRepository(
         )
     }
 
-    private fun TripEntity.toHike() = Hike(id, routeName, date, difficulty)
+    private fun TripEntity.toHike() = Hike(id, routeName, date, difficulty, area = toArea())
+
+    /** An area only when all three columns are set; otherwise the hike has none. */
+    private fun TripEntity.toArea(): Area? =
+        if (areaLabel != null && latitude != null && longitude != null) Area(areaLabel, latitude, longitude) else null
 
     private fun ChecklistItemEntity.toPackingItem() =
         PackingItem(id, label, isPacked, position, forgotten, carriedOver, addedAfterHike)

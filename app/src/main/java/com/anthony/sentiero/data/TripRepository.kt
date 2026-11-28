@@ -3,6 +3,7 @@
 // Spec 2 adds one method per task (add/delete item, journal, delete hike, ...).
 package com.anthony.sentiero.data
 
+import com.anthony.sentiero.domain.Area
 import com.anthony.sentiero.domain.Difficulty
 import com.anthony.sentiero.domain.Hike
 import com.anthony.sentiero.domain.HikeSummary
@@ -15,8 +16,8 @@ interface TripRepository {
     fun observeHike(id: String): Flow<Hike?>
     fun observeItems(tripId: String): Flow<List<PackingItem>>
 
-    /** Saves the hike and its starting packing list together. Returns the new hike's id. */
-    suspend fun createHike(routeName: String, date: LocalDate, difficulty: Difficulty): String
+    /** Saves the hike (with its [area], if one was picked) and its starting packing list together. Returns the new hike's id. */
+    suspend fun createHike(routeName: String, date: LocalDate, difficulty: Difficulty, area: Area? = null): String
 
     /** Saves [packed] as-is (absolute value), so the last tap always wins. */
     suspend fun setPacked(itemId: String, packed: Boolean)
