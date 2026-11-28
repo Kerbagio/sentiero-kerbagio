@@ -44,6 +44,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.anthony.sentiero.domain.Difficulty
 import com.anthony.sentiero.domain.label
 import com.anthony.sentiero.domain.templateFor
+import com.anthony.sentiero.ui.components.AreaSearchField
 import com.anthony.sentiero.ui.shortLabel
 import java.time.Instant
 import java.time.ZoneOffset
@@ -58,6 +59,7 @@ fun HikeFormScreen(
     onSaved: (String) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val areaUi by viewModel.areaSearch.ui.collectAsStateWithLifecycle()
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -130,6 +132,17 @@ fun HikeFormScreen(
                     ) { Text(difficulty.label) }
                 }
             }
+
+            // Row order (DR Pass 1): name, date, difficulty, area, list, Save.
+            AreaSearchField(
+                ui = areaUi,
+                onTextChange = viewModel.areaSearch::onTextChange,
+                onSubmit = viewModel.areaSearch::submit,
+                onRetry = viewModel.areaSearch::retry,
+                onPick = viewModel.areaSearch::pick,
+                onClear = viewModel.areaSearch::clear,
+                unpickedHint = stringResource(R.string.area_unpicked_hint),
+            )
 
             Text(stringResource(R.string.list_starts_from), style = MaterialTheme.typography.labelLarge)
             val count = state.difficulty?.let { templateFor(it).size }
