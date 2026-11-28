@@ -179,6 +179,7 @@ components:
 - Upcoming list, trip form, checklist: Operate.
 - Journal entries and notes: Read.
 - Forecast panel: Operate (glanceable numbers).
+- Landmark map (2.18): Read and choose (find a spot, see its trails, plan a hike there).
 **Reference sites:** none; the direction comes from design knowledge (research declined).
 **Key characteristics:**
 - Condensed, sign-like route names over calm body text.
@@ -253,7 +254,14 @@ Squared-off, like signage. Compose `Shapes`: extraSmall = `xs` (tags, checkboxes
 - **Text field:** outlined, `sm` corners, 2dp `primary` border on focus, helper text in `body-small`.
 - **Bottom sheet (Mark as done):** `surface-container-low`, `xl` top corners, drag handle, title in `title`.
 - **Snackbar:** `inverse-surface` with the Undo action in `inverse-primary`.
-- **Navigation bar:** two destinations, `surface-container`, `secondary-container` indicator.
+- **Navigation bar:** three destinations (Upcoming, Map, Completed), `surface-container`, `secondary-container` indicator. Two until the map (2.18) is built.
+- **Landmark map (2.18):** the map is a tool, not decoration.
+  - Map style: OpenFreeMap Positron in light, Dark in dark, so the map stays quiet neutral like the limestone ground.
+  - Markers: `primary-container` fill with a 2dp `primary` stroke, 8dp radius; the selected marker is `primary` fill at 10dp.
+  - Trails: the selected trail is a 4dp `primary` line; the spot's other trails are 2dp `outline`.
+  - The map takes the top ~55% of the screen. Below it, the spots are full-width rows with hairlines (name in `title`, region and trail count in `body-small`), so every spot also works offline and with TalkBack.
+  - Tapping a spot opens a bottom sheet styled like the Mark-as-done sheet: trail rows with lengths in tabular figures, one filled primary **Plan a hike here** button, and the attribution in `body-small` `on-surface-variant`.
+  - No blaze on the map: it stays reserved for memory.
 
 ## Do's and Don'ts
 
@@ -264,7 +272,7 @@ Squared-off, like signage. Compose `Shapes`: extraSmall = `xs` (tags, checkboxes
 - Do keep `dynamicColor = false`.
 - Don't put trips or checklist items in cards; use rows and hairlines.
 - Don't use green as a "nature" decoration; cedar is ink, not a theme color splash.
-- Don't add photos, maps, mountain illustrations or emoji to fill space.
+- Don't add photos, maps, mountain illustrations or emoji to fill space. The one exception is the landmark map (2.18), because it is a feature you use, not decoration, and it follows the Landmark map rules above.
 - Don't use the blaze or orange for warnings or errors.
 - Don't round everything; keep the shape scale.
 
@@ -282,3 +290,4 @@ Squared-off, like signage. Compose `Shapes`: extraSmall = `xs` (tags, checkboxes
 | 2026-11-01 | Blaze color reserved for memory | Serves "It remembers what I forgot"; the loop is visible at a glance |
 | 2026-11-01 | Barlow Condensed + Source Sans 3, bundled | Signage-like titles fit long route names; offline rendering; both OFL |
 | 2026-11-01 | Rows instead of cards; dynamic color off | Calmer, denser lists; color meaning survives on every phone |
+| 2026-11-28 | Landmark map allowed (2.18), third tab "Map" | The professor suggested it; it is the way into planning a hike, so it serves the product. It uses neutral map styles and cedar markers, with no blaze |

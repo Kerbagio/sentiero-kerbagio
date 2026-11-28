@@ -827,7 +827,7 @@ fun Landmark.toArea(): Area = Area(areaLabel(name, region, "Lebanon"), latitude,
 - **Prefill:** **Plan a hike here** navigates to `HikeForm(landmarkId = id)`. `HikeFormViewModel` loads the landmark and starts with route name = landmark name and the area field in Picked state with `landmark.toArea()`. Date and difficulty stay empty, and Save works as usual. A missing id opens a blank form.
 - **README:** the Map tab, MapLibre + OpenFreeMap, the bundled OSM data and how to refresh it with `tools/fetch_trails.py`, and the attribution.
 
-**Design** (DESIGN.md needs your OK first: it says "Don't add photos, maps…" and "Navigation bar: two destinations")
+**Design** (approved 28 Nov; DESIGN.md has the Landmark map rules)
 - Map style Positron (light) / Dark: quiet neutrals, close to the limestone ground.
 - Markers: `primary-container` fill with a `primary` 2dp stroke, 8dp radius; selected = `primary` fill, 10dp radius. The selected trail line is 4dp `primary`; the other trails are 2dp `outline`. **No blaze anywhere**: it stays reserved for memory.
 - Sheet, rows, the error text and the button use the existing tokens. No new colors.
